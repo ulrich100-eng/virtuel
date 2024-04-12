@@ -1,16 +1,18 @@
 import pytest
 import requests
 import json
+from config import AUTHORIZATION_TOKEN
+from config import BASE_URL
 
 def test_postchange():
     
     header = {
         'accept':'application/json',
         'Content-Type':'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJrSnRxNGNzNkRJRllNZFJ0TFMzeE5EcTNFN0M3UzBnWlVOeUZMQmYwZjVVIn0.eyJleHAiOjE3MTI2NjIyMjYsImlhdCI6MTcxMjY2MTMyNiwiYXV0aF90aW1lIjoxNzEyNjYxMzI1LCJqdGkiOiI3MGUxN2RkZi0zZmUyLTQwNjgtODk0MC0yN2I3MTEyMDk2YWIiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLXByZXByb2QuYXBwcy5kZXYub3JhbmdlLmxvY2FsL3JlYWxtcy9kaWdpdGFsLWFwcCIsImF1ZCI6InBlcmZpdCIsInN1YiI6IjA0OWU0YjUxLWVhNWUtNDMxYy04ZTEwLTJlZmQ3OWE4YWIxMiIsInR5cCI6IklEIiwiYXpwIjoicGVyZml0Iiwibm9uY2UiOiI5ZTRjMGY2ZS1lN2IwLTRkOTctYjJhMC1iZWRhM2M2Y2Y4OTAiLCJzZXNzaW9uX3N0YXRlIjoiNmEwYzMxOWMtMDU3MS00M2UxLWJhNDktNDYyMjIzNDg5Njk0IiwiYXRfaGFzaCI6InVLbmRDanpjODhMazRwQ1ljZ1dadVEiLCJzaWQiOiI2YTBjMzE5Yy0wNTcxLTQzZTEtYmE0OS00NjIyMjM0ODk2OTQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJLRU5HTkUgIEtFTkdORSIsInByZWZlcnJlZF91c2VybmFtZSI6InpiaHE4MzQ5IiwiZ2l2ZW5fbmFtZSI6IktFTkdORSAiLCJmYW1pbHlfbmFtZSI6IktFTkdORSIsImVtYWlsIjoidWxyaWNoLmtlbmduZUBvcmFuZ2UuY29tIn0.ZVpUWti9heHuUwD3Q1dR129paxPQVOwmRb6yYD1zIMx_tvoeqPg6N5VSc4S5QeOjEARChfQq35felNHhh-X_-nMdVqeYplGGMH4DRgw6RfNflddaV8kSZAeV5V1Ak7Rg8F76lZY_wRc0rwARb8uAiRNNi47mauSOzEGC-5q9Ew4m45c89C0LW2kgqqu5mWj0UaaZdJpxrkeNlCrEjeBRKf194k-ypw1_2k6bemIqRliuX9rY3Jekku5N9qZn7DLgJ7a8HbLJ2oiVcdCab89Xq7Jsu0AhjBFnTYq4Ymo67dd6TGoMQK3tTZZyUL-JJzdXEnlOQNDXVdHEHMGlskKK5w'
+        'Authorization': AUTHORIZATION_TOKEN
     }
     
-    url = 'https://change-request.perfit.apps.dev.orange.local/api/changerequests'
+    url = BASE_URL 
     
     request_body = {
         "name": "string",
@@ -51,5 +53,11 @@ def test_postchange():
     response = requests.post(url , headers = header, json = request_body, verify=False )  # Remplacez par votre URL d'API
     
     
-    assert response.status_code == 401
+    user_data = response.json()
+    
+    assert 'name' in user_data
+    
+    assert user_data['name'] == "string"
+    assert response.status_code == 201
+    
     
