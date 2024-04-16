@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="1.102" timestamp="2024-04-16T15:49:09.769823" hostname="WX-CZC73977ZP"><testcase classname="tests.test_apiactionschange" name="test_postchangerequest" time="0.163" /><testcase classname="tests.test_apiactionschange" name="test_putchangerequest" time="0.440" /><testcase classname="tests.test_apiactionschange" name="test_deletechangerequest" time="0.001"><failure message="TypeError: Apichangerequest.delete_changerequest() missing 1 required positional argument: 'data'">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x000001F43D11C5D0&gt;
+
+    def test_deletechangerequest(api_changerequest):
+    
+&gt;        response = api_changerequest.delete_changerequest()
+E        TypeError: Apichangerequest.delete_changerequest() missing 1 required positional argument: 'data'
+
+test_apiactionschange.py:97: TypeError</failure></testcase></testsuite></testsuites>

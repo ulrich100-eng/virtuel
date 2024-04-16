@@ -24,5 +24,21 @@ class Apichangerequest:
         response = requests.post(url,   json=data ,  headers=self.headers , verify=False)
         
         return response
+    
+    
+    def put_changerequest(self,data,put_id):
+        
+        url = f"{BASE_URL}/{put_id}"
+        
+        response = requests.put(url, json=data , headers=self.headers , verify=False )
+        
+        return response
 
-  
+    
+    def delete_changerequest(self,request_id):
+        
+        url =  f"{BASE_URL}/{request_id}"
+        
+        response = requests.delete(url, headers=self.headers , verify=False )
+        
+        return response
