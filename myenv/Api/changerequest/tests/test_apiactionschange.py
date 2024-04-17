@@ -51,7 +51,6 @@ def test_postchangerequest(api_changerequest):
      
 
 def test_putchangerequest(api_changerequest):
-     put_id = "1560fb89-30dc-4fad-bec6-5f5d2d7f5817"
      data = {
         "name": "string",
         "holderCuid": "string",
@@ -87,13 +86,28 @@ def test_putchangerequest(api_changerequest):
         ]
       }
     
-     response = api_changerequest.put_changerequest(put_id,data)
+     response = api_changerequest.put_changerequest(data)
      assert response.status_code == 204
      
+
      
 
 def test_deletechangerequest(api_changerequest):
     request_id = "1742be55-09a8-4d1c-8550-bd1de152f686"
     response = api_changerequest.delete_changerequest(request_id)
     assert response.status_code == 204
+
+
+
+
+def test_putchangerequest(api_changerequest):
+     parameters = {
+       "PageNumber": 2,
+       "PageSize": 2,
+       "SortOrder": "-startDate",
+       "Filters": "state==0"
+      }
+    
+     response = api_changerequest.get_changerequest(parameters)
+     assert response.status_code == 204
      

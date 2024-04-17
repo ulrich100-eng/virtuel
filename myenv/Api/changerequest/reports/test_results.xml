@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="7.765" timestamp="2024-04-16T16:25:10.910691" hostname="WX-CZC73977ZP"><testcase classname="tests.test_apiactionschange" name="test_postchangerequest" time="0.311" /><testcase classname="tests.test_apiactionschange" name="test_putchangerequest" time="0.204"><failure message="assert 404 == 204&#10; +  where 404 = &lt;Response [404]&gt;.status_code">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x0000020C43D61010&gt;
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="5.960" timestamp="2024-04-17T10:36:26.131177" hostname="WX-CZC73977ZP"><testcase classname="tests.test_apiactionschange" name="test_putchangerequest" time="0.114"><failure message="assert 400 == 204&#10; +  where 400 = &lt;Response [400]&gt;.status_code">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x00000208C14059D0&gt;
 
     def test_putchangerequest(api_changerequest):
-         put_id = "1560fb89-30dc-4fad-bec6-5f5d2d7f5817"
+         PUT_ID = "14b7d651-eddd-40f5-a122-ab51d660e874"
          data = {
             "name": "string",
             "holderCuid": "string",
@@ -37,12 +37,12 @@
             ]
           }
     
-         response = api_changerequest.put_changerequest(put_id,data)
+         response = api_changerequest.put_changerequest(PUT_ID,data)
 &gt;        assert response.status_code == 204
-E        assert 404 == 204
-E         +  where 404 = &lt;Response [404]&gt;.status_code
+E        assert 400 == 204
+E         +  where 400 = &lt;Response [400]&gt;.status_code
 
-tests\test_apiactionschange.py:91: AssertionError</failure></testcase><testcase classname="tests.test_apiactionschange" name="test_deletechangerequest" time="0.270"><failure message="assert 404 == 204&#10; +  where 404 = &lt;Response [404]&gt;.status_code">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x00000253FD2042D0&gt;
+tests\test_apiactionschange.py:91: AssertionError</failure></testcase><testcase classname="tests.test_apiactionschange" name="test_deletechangerequest" time="0.160"><failure message="assert 404 == 204&#10; +  where 404 = &lt;Response [404]&gt;.status_code">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x00000245A14D5890&gt;
 
     def test_deletechangerequest(api_changerequest):
         request_id = "1742be55-09a8-4d1c-8550-bd1de152f686"
@@ -51,4 +51,4 @@ tests\test_apiactionschange.py:91: AssertionError</failure></testcase><testcase 
 E       assert 404 == 204
 E        +  where 404 = &lt;Response [404]&gt;.status_code
 
-tests\test_apiactionschange.py:98: AssertionError</failure></testcase></testsuite></testsuites>
+tests\test_apiactionschange.py:98: AssertionError</failure></testcase><testcase classname="tests.test_apiactionschange" name="test_postchangerequest" time="0.220" /></testsuite></testsuites>
