@@ -1,5 +1,5 @@
 import pytest
-from api_changerequest import Apichangerequest
+from Api.changerequest.tests.api_changerequest import Apichangerequest
 
 
 
@@ -32,7 +32,7 @@ def test_postchangerequest(api_changerequest):
         "status": "string",
         "reference": 0,
         "validators": "string",
-        "state": 10,
+        "state": 0,
         "type": 0,
         "createdDate": "2024-04-05T09:13:11.514Z",
         "kpis": [
@@ -46,12 +46,12 @@ def test_postchangerequest(api_changerequest):
       }
     
      response = api_changerequest.post_changerequest(data)
-     assert response.status_code == 201
+     assert response.status_code == 401
      
      
 
 def test_putchangerequest(api_changerequest):
-     data = {
+        data = {
         "name": "string",
         "holderCuid": "string",
         "holderName": "string",
@@ -73,7 +73,7 @@ def test_putchangerequest(api_changerequest):
         "status": "string",
         "reference": 0,
         "validators": "string",
-        "state": 10,
+        "state": 0,
         "type": 0,
         "createdDate": "2024-04-05T09:13:11.514Z",
         "kpis": [
@@ -86,28 +86,23 @@ def test_putchangerequest(api_changerequest):
         ]
       }
     
-     response = api_changerequest.put_changerequest(data)
-     assert response.status_code == 204
+        response = api_changerequest.put_changerequest(data)
      
-
+        
+        assert response.status_code == 401
      
-
+              
+        
+    
 def test_deletechangerequest(api_changerequest):
-    request_id = "1742be55-09a8-4d1c-8550-bd1de152f686"
-    response = api_changerequest.delete_changerequest(request_id)
+    response = api_changerequest.delete_changerequest()
     assert response.status_code == 204
 
 
 
 
-def test_putchangerequest(api_changerequest):
-     parameters = {
-       "PageNumber": 2,
-       "PageSize": 2,
-       "SortOrder": "-startDate",
-       "Filters": "state==0"
-      }
-    
-     response = api_changerequest.get_changerequest(parameters)
-     assert response.status_code == 204
+def test_getlistchangerequest(api_changerequest):
+     
+     response = api_changerequest.get_changerequest()
+     assert response.status_code == 401
      

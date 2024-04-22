@@ -15,13 +15,19 @@ class Apichangerequest:
             'Authorization': AUTHORIZATION_TOKEN
         }
          
-        self.params = {
-            "PageNumber": 2,
-            "PageSize": 2,
-            "SortOrder": "-startDate",
+        self.paramslist = {
+            "PageNumber": 0,
+            "PageSize": 0,
+            "SortOrder": "",
             "Filters": "state==0"
         }
         
+        self.paramsrech = {
+            "PageNumber": 0,
+            "PageSize": 0,
+            "SortOrder": "",
+            "Filters": "state==0"
+        }
          
     def post_changerequest(self,data):
         
@@ -35,7 +41,9 @@ class Apichangerequest:
     
     def put_changerequest(self,data):
         
-        url = f"{BASE_URL}/14b7d651-eddd-40f5-a122-ab51d660e874"
+        url = f"{BASE_URL}/d469f318-a79c-4806-ab8d-e9baf0ec2fd6"
+        
+        print("URL utilisée :", url)
         
         response = requests.put(url, json=data , headers=self.headers , verify=False )
         
@@ -46,20 +54,28 @@ class Apichangerequest:
     
     def delete_changerequest(self):
         
-        url =  f"{BASE_URL}/1742be55-09a8-4d1c-8550-bd1de152f686"
-        
+        url =  f"{BASE_URL}/a77c75b1-17fb-4bfc-ad5c-d6fa8359e41e"
+     
         response = requests.delete(url, headers=self.headers , verify=False )
         
         return response
     
     
     
-    def get_changerequest(self):
+    def get_listchangerequest(self,paramslist):
         
-        url =  f"{BASE_URL}/{self.params}"
-        print(f"Sending GET request to URL: {url}")
-        
-        response = requests.get(url, headers=self.headers , verify=False, params=self.params )
+        url =  f"{BASE_URL}?{self.paramslist}"
+        print("URL utilisée :", url)
+        response = requests.get(url, headers=self.headers , verify=False, params=paramslist)
         
         return response
         
+    
+    
+    def get_rechchangerequest(self,parameters):
+        
+        url =  f"{BASE_URL}?{self.paramsrech}"
+     
+        response = requests.get(url, headers=self.headers , verify=False, params=parameters )
+        
+        return response

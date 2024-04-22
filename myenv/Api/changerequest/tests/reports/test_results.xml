@@ -1,1 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="0" time="0.912" timestamp="2024-04-17T13:51:27.728796" hostname="WX-CZC73977ZP" /></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.970" timestamp="2024-04-17T18:26:56.845176" hostname="WX-CZC73977ZP"><testcase classname="tests.test_apiactionschange" name="test_postchangerequest" time="0.163" /><testcase classname="tests.test_apiactionschange" name="test_putchangerequest" time="0.110" /><testcase classname="tests.test_apiactionschange" name="test_deletechangerequest" time="0.080"><failure message="assert 500 == 204&#10; +  where 500 = &lt;Response [500]&gt;.status_code">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x0000013C98379A50&gt;
+
+    def test_deletechangerequest(api_changerequest):
+        response = api_changerequest.delete_changerequest()
+&gt;       assert response.status_code == 204
+E       assert 500 == 204
+E        +  where 500 = &lt;Response [500]&gt;.status_code
+
+test_apiactionschange.py:97: AssertionError</failure></testcase><testcase classname="tests.test_apiactionschange" name="test_getchangerequest" time="0.118" /></testsuite></testsuites>
