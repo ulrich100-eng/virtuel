@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="0.564" timestamp="2024-04-17T17:01:27.022815" hostname="WX-CZC73977ZP"><testcase classname="tests.test_apiactionschange" name="test_postchangerequest" time="0.087" /><testcase classname="tests.test_apiactionschange" name="test_putchangerequest" time="0.001"><failure message="TypeError: Apichangerequest.get_changerequest() takes 1 positional argument but 2 were given">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x00000251F0B6D390&gt;
+
+    def test_putchangerequest(api_changerequest):
+         parameters = {
+           "PageNumber": 2,
+           "PageSize": 2,
+           "SortOrder": "-startDate",
+           "Filters": "state==0"
+          }
+    
+&gt;        response = api_changerequest.get_changerequest(parameters)
+E        TypeError: Apichangerequest.get_changerequest() takes 1 positional argument but 2 were given
+
+tests\test_apiactionschange.py:111: TypeError</failure></testcase><testcase classname="tests.test_apiactionschange" name="test_deletechangerequest" time="0.001"><failure message="TypeError: Apichangerequest.delete_changerequest() takes 1 positional argument but 2 were given">api_changerequest = &lt;api_changerequest.Apichangerequest object at 0x00000251F0B56D10&gt;
+
+    def test_deletechangerequest(api_changerequest):
+        request_id = "1742be55-09a8-4d1c-8550-bd1de152f686"
+&gt;       response = api_changerequest.delete_changerequest(request_id)
+E       TypeError: Apichangerequest.delete_changerequest() takes 1 positional argument but 2 were given
+
+tests\test_apiactionschange.py:97: TypeError</failure></testcase></testsuite></testsuites>
