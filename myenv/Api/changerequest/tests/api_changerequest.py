@@ -1,5 +1,5 @@
 import requests
-from config import BASE_URL , AUTHORIZATION_TOKEN 
+from Api.changerequest.tests.pict import BASE_URL , AUTHORIZATION_TOKEN
 
 
 class Apichangerequest:
@@ -15,24 +15,32 @@ class Apichangerequest:
             'Authorization': AUTHORIZATION_TOKEN
         }
          
+         
+        self.idput =   "23074633-2087-40af-8d7e-7af69576a62e"
+        
+        
+        self.idelete = "cd938521-38ef-44fa-bb02-d613c71455a5"
+         
+         
         self.paramslist = {
-            "PageNumber": 0,
-            "PageSize": 0,
-            "SortOrder": "",
-            "Filters": "state==0"
+            
+            'Filters': 'state==0'
         }
         
-        self.paramsrech = {
-            "PageNumber": 0,
-            "PageSize": 0,
-            "SortOrder": "",
-            "Filters": "state==0"
+        
+        self.paramsearch = {
+            'PageNumber': 2,
+            'PageSize': 2,
+            'SortOrder': 'SortOrder = -startDate',
+            'Filters': 'state==0'
         }
+         
+         
          
     def post_changerequest(self,data):
         
         url = BASE_URL
-    
+        print("URL utilisée :", url)
         response = requests.post(url,   json=data ,  headers=self.headers , verify=False)
         
         return response
@@ -41,7 +49,7 @@ class Apichangerequest:
     
     def put_changerequest(self,data):
         
-        url = f"{BASE_URL}/d469f318-a79c-4806-ab8d-e9baf0ec2fd6"
+        url = f"{BASE_URL}/{self.idput}"
         
         print("URL utilisée :", url)
         
@@ -54,28 +62,28 @@ class Apichangerequest:
     
     def delete_changerequest(self):
         
-        url =  f"{BASE_URL}/a77c75b1-17fb-4bfc-ad5c-d6fa8359e41e"
-     
+        url =  f"{BASE_URL}/{self.idelete}"
+        print("URL utilisée :", url)
         response = requests.delete(url, headers=self.headers , verify=False )
         
         return response
     
     
     
-    def get_listchangerequest(self,paramslist):
+    def get_listchangerequest(self):
         
-        url =  f"{BASE_URL}?{self.paramslist}"
+        url =  f"{BASE_URL}"
         print("URL utilisée :", url)
-        response = requests.get(url, headers=self.headers , verify=False, params=paramslist)
+        response = requests.get(url, headers=self.headers , verify=False, params=self.paramslist)
         
         return response
         
     
-    
-    def get_rechchangerequest(self,parameters):
+
+    def get_searchangerequest(self):
         
-        url =  f"{BASE_URL}?{self.paramsrech}"
-     
-        response = requests.get(url, headers=self.headers , verify=False, params=parameters )
+        url =  f"{BASE_URL}"
+        print("URL utilisée :", url)
+        response = requests.get(url, headers=self.headers , verify=False, params=self.paramsearch)
         
-        return response
+        return response 

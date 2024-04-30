@@ -1,2 +1,17 @@
-AUTHORIZATION_TOKEN = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJrSnRxNGNzNkRJRllNZFJ0TFMzeE5EcTNFN0M3UzBnWlVOeUZMQmYwZjVVIn0.eyJleHAiOjE3MTMzNzUzMjMsImlhdCI6MTcxMzM3NDQyMywiYXV0aF90aW1lIjoxNzEzMzcwNzE1LCJqdGkiOiIxOWU4ODczMy1mNmZiLTQ4NWQtOWQwOC1hNDMzMjUwMDQ0ZmUiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLXByZXByb2QuYXBwcy5kZXYub3JhbmdlLmxvY2FsL3JlYWxtcy9kaWdpdGFsLWFwcCIsImF1ZCI6InBlcmZpdCIsInN1YiI6IjA0OWU0YjUxLWVhNWUtNDMxYy04ZTEwLTJlZmQ3OWE4YWIxMiIsInR5cCI6IklEIiwiYXpwIjoicGVyZml0Iiwibm9uY2UiOiI5NTZjNDdhYy04Mjc1LTQ5ZmMtYjA1ZS00YmE3MTZmMzlmYjciLCJzZXNzaW9uX3N0YXRlIjoiNWRlYmFiZWUtZDkwMy00NjgxLWEyMzctZTQwYTQ2NTA4NjFjIiwiYXRfaGFzaCI6Im05MWpZYXgtcHU0WjhSV1JLYUs0dkEiLCJzaWQiOiI1ZGViYWJlZS1kOTAzLTQ2ODEtYTIzNy1lNDBhNDY1MDg2MWMiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJLRU5HTkUgIEtFTkdORSIsInByZWZlcnJlZF91c2VybmFtZSI6InpiaHE4MzQ5IiwiZ2l2ZW5fbmFtZSI6IktFTkdORSAiLCJmYW1pbHlfbmFtZSI6IktFTkdORSIsImVtYWlsIjoidWxyaWNoLmtlbmduZUBvcmFuZ2UuY29tIn0.BBWHPVZxCDTqWFjFJhvlDITBgr_-q3Fa_37pvOfXRxU2yisWk3tIX3vBFHimIF5XyCHBDhkLNH7ccawv9mL1UnX2yyavHkWMvRwqJ51UWm5s8DeCdsfHi6-_NrYrNE-lC75Yk1yySI-HBFzx_nMK3Rmeu5eZEBLaKtXSDxVG_t-jNPx2dOYCUfcNjXDMYMvYCJEYFJxhlQV1HR9xfs-uRYvqSA139ctvEgx_F0GCCKK3PDF3STH7p8ouLdAfhIOECRcdR6LTvO9MLNkXMR3anFvvpF6Y-3seacKMQg0w6cxQjya1g5EdQlf0p8YJyGrCjC5WNs4LNPxojM4HwQqi5Q'
-BASE_URL = 'https://change-request.perfit.apps.dev.orange.local/api/changerequests'
+import os
+from datetime import datetime
+import pytest
+
+# @pytest.hookimpl(tryfirst=True)
+def pytest_configure(config):
+    # to remove environment section
+    config._metadata = None
+
+    if not os.path.exists('reports'):
+        os.makedirs('reports')
+
+    # Génération du rapport excel
+    config.option.excelreport = True
+
+    # Génération du rapport excel
+    config.option.excelpath = 'reports/' + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".xls"
