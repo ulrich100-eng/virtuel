@@ -184,7 +184,7 @@ def test_putchangerequest_value_error_on_state_field(api_changerequest):
     
     
     
-def test_putchangerequest_wrong_value_on_field_id(api_changerequest):
+def test_putchangerequest_wrong_value_on_type_field_id(api_changerequest):
    
     data = { 
         "name": "string",
@@ -223,6 +223,51 @@ def test_putchangerequest_wrong_value_on_field_id(api_changerequest):
     api_changerequest.idput = '23074633-2087-40af-8d7e-7af69576'
     response = api_changerequest.put_changerequest(data)
     assert response.status_code == 404
+
+
+
+
+
+def test_putchangerequest_wrong_value_on_field_id(api_changerequest):
+   
+    data = { 
+        "name": "string",
+        "holderCuid": "string",
+        "holderName": "string",
+        "holderEmail": "string",
+        "initiatorCuid": "string",
+        "initiatorName": "string",
+        "initiatorEmail": "string",
+        "direction": "string",
+        "startDate": "2024-04-29T10:37:01.701Z",
+        "priority": "string",
+        "targetClient": "string",
+        "sendToART": True,
+        "origin": "string",
+        "goal": "string",
+        "reason": "string",
+        "description": "string",
+        "workflowDefinitionId": "string",
+        "workflowInstanceId": "string",
+        "status": "string",
+        "reference": 0,
+        "validators": "string",
+        "state": 10,
+        "type": 0,
+        "createdDate": "2024-04-29T10:37:01.701Z",
+        "kpis": [
+            {
+                "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "label": "string",
+                "frequency": 0,
+                "unit": "string"
+            }
+        ]
+    }
+    api_changerequest.idput = '11a34b52-e03b-4ab2-8427-f57631b4ce1b'
+    response = api_changerequest.put_changerequest(data)
+    assert response.status_code == 500
+
 
 
 

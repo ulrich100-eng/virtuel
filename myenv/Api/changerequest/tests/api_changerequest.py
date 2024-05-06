@@ -1,5 +1,5 @@
 import requests
-from Api.changerequest.tests.pict import BASE_URL , AUTHORIZATION_TOKEN
+from Api.changerequest.pict import BASE_URL , AUTHORIZATION_TOKEN
 
 
 class Apichangerequest:
