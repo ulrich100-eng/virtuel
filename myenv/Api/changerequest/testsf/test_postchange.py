@@ -1,28 +1,25 @@
 import pytest
 import requests
+import random
 import time
-import pytest_benchmark
-# URL de l'API et jeton d'accès
-API_URL = "https://change-request.perfit.apps.dev.orange.local/api/changerequests"
-BEARER_TOKEN = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJrSnRxNGNzNkRJRllNZFJ0TFMzeE5EcTNFN0M3UzBnWlVOeUZMQmYwZjVVIn0.eyJleHAiOjE3MTQ4MzA5MTQsImlhdCI6MTcxNDgzMDAxNCwiYXV0aF90aW1lIjoxNzE0ODMwMDEyLCJqdGkiOiI5ZmQyNGNlYS1kYjMxLTRiY2MtYWExOS1jNTU3YWFkNTEwMTAiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLXByZXByb2QuYXBwcy5kZXYub3JhbmdlLmxvY2FsL3JlYWxtcy9kaWdpdGFsLWFwcCIsImF1ZCI6InBlcmZpdCIsInN1YiI6IjA0OWU0YjUxLWVhNWUtNDMxYy04ZTEwLTJlZmQ3OWE4YWIxMiIsInR5cCI6IklEIiwiYXpwIjoicGVyZml0Iiwibm9uY2UiOiI5MDlkYzEzNS1kZmFhLTRmYmMtOWM2Zi1jZWYyZjIwZDhiOTMiLCJzZXNzaW9uX3N0YXRlIjoiZjIwNGI1ZjgtNjc4ZS00MzNmLWEwYzctZWNmMmQ3NmU1NzZhIiwiYXRfaGFzaCI6IkQwdWJSZHl3bHhIbjJNM1NSeUdmUEEiLCJzaWQiOiJmMjA0YjVmOC02NzhlLTQzM2YtYTBjNy1lY2YyZDc2ZTU3NmEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJLRU5HTkUgIEtFTkdORSIsInByZWZlcnJlZF91c2VybmFtZSI6InpiaHE4MzQ5IiwiZ2l2ZW5fbmFtZSI6IktFTkdORSAiLCJmYW1pbHlfbmFtZSI6IktFTkdORSIsImVtYWlsIjoidWxyaWNoLmtlbmduZUBvcmFuZ2UuY29tIn0.dg6vO182hnizSIKucI-TZqCyQj6nmaOFcW--5huXrcEsctXWo24ektvX_kY0p6kjnD_FKqVwZ3NysMkZ79Y7tociq2l7HocLY6ErkF76FiZfXkzCvMf0l6_bXWkV0fiGsyjukCF429Y9VoOIQOZ6X5a55gT9eyMuwVXmpytlcAWXWYn9pCaBOpSKeRo7uI_lzf2wjikK8oHnlrNkcOq7Wyn5VH7hGE2DMpXLJpnrDgFvxq58Iu_gncDxhd6ngNiP-AFC2gN6JZkGUtrXRMQ8ZfjkgzkgWI29L0R2k-Kqe8yzjbBzhiVu9fewKrPQ8v6cI_woV6KiHjOy3xbDI7YGjg"
-
-# Fonction pour envoyer une requête POST avec les données fournies
-def send_post_request(url, headers, data):
-    response = requests.post(url, headers=headers, json=data, verify=False)
-    return response
+from   Api.changerequest.testsf.api_change import Apichange
 
 
 
 
 
 
-# Test de performance pour la fonctionnalité d'API POST
-@pytest.mark.performance
-def test_api_post_performance():
-    # URL de l'utilisateur
-    user_url = "https://change-request.perfit.apps.dev.orange.local/api/changerequests"
 
-    # Corps de la requête
+@pytest.fixture
+def api_change():
+    return Apichange()
+   
+    
+
+def test_send_post(api_change):
+       
+    api_change = Apichange
+    
     request_body = {
         
          "name": "string",
@@ -58,27 +55,75 @@ def test_api_post_performance():
             }
         ]
     }
-
-    # En-têtes de la requête avec le jeton d'accès
-    headers = {
-        "Authorization": f"Bearer {BEARER_TOKEN}",
-        "Content-Type": "application/json"
-    }
+    
 
     # Nombre de requêtes à envoyer pour le test de performance
-    num_requests = 100
- 
+    num_requests = 50
 
-    # Envoi de plusieurs requêtes et mesure du temps d'exécution total
+    # Initialisation des métriques
+    total_time = 0
+    success_count = 0
+    failure_count = 0
+    # total_time = time.time()
+
+    # Envoi de plusieurs requêtes et mesure des métriques de performance
     for _ in range(num_requests):
         start_time = time.time()
-        response = send_post_request(user_url, headers, request_body)
-        assert response.status_code == 401
+        response = api_change.send_post_request(request_body)
+        assert response.status_code == 200
         end_time = time.time()
-        total_time += end_time - start_time
+        
+        print("Les métriques de performance sont :")
+        # Calcul du temps de réponse
+        response_time = end_time - start_time
+        total_time += response_time
+        print("Temps total d'exécution:", total_time)
+        
+        # Vérification du succès ou de l'échec de la requête de manière aléatoire
+        random_value = random.random()
+        print("Valeur aléatoire générée :", random_value)
+        if random.random() < 0.9:  # Taux de succès de 90%
+            assert response.status_code == 200
+            success_count += 1
+        else:
+            assert response.status_code != 200
+            failure_count += 1
 
-    # Calcul de la moyenne du temps d'exécution par requête
-    average_time = total_time / num_requests
+    # Calcul du temps de réponse moyen
+        average_response_time = total_time / num_requests
+        
+        # print("Temps de reponse moyen : " , average_response_time ) 
+        
+        print(f"Temps de réponse moyen : {average_response_time} secondes")
+        
+    # Calcul du taux de succès et d'échec
+    
+        success_rate = success_count / num_requests
+        print(f"Taux de succès : {success_rate}")
+    
+        failure_rate = failure_count / num_requests
+        print(f"Taux d'échec : {failure_rate}")
+    
+    # Assertion pour vérifier si le temps de réponse moyen est inférieur à 1 seconde
+    assert average_response_time < 1, f"Average response time exceeded 1 second: {average_response_time} seconds"
 
-    # Assertion pour vérifier si la moyenne du temps est inférieure à 1 seconde
-    assert average_time < 1, f"Average time exceeded 1 second: {average_time} seconds"
+  
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

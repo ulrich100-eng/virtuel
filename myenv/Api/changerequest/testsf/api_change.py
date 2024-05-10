@@ -1,21 +1,25 @@
-# import requests
-# from Api.changerequest.pict import BASE_URL , AUTHORIZATION_TOKEN
+import requests
+from Api.changerequest.pict import BASE_URL , AUTHORIZATION_TOKEN
 
 
-# class Apichange:
+
+
+
+class Apichange:
    
    
-#     def __init__(self):
+    def __init__(self):
        
-#         self.base_url = BASE_URL
+        self.base_url = BASE_URL
         
-#         self.headers = {
-#             'Accept': 'application/json',
-#             'Content-Type': 'application/json',
-#             'Authorization': AUTHORIZATION_TOKEN
-#         }
+        # self.headers = {
+        #       'Accept' = 'application/json',
+        #       'Content-Type'= 'application/json',
+        #      'Authorization' : authorization_token
+        # }
          
-         
+        # AUTHORIZATION_TOKEN = 'YOUR_AUTHORIZATION_TOKEN_HERE'
+        # request_object = MyRequest(AUTHORIZATION_TOKEN)
 #         # self.idput =   "23074633-2087-40af-8d7e-7af69576a62e"
         
         
@@ -37,13 +41,12 @@
          
          
          
-    # def post_change(self,data):
+    def send_post_request(self):
         
-    #     url = BASE_URL
-    #     print("URL utilisée :", url)
-    #     response = requests.post(url,   json=data ,  headers=self.headers , verify=False)
-        
-    #     return response
+        url = BASE_URL
+        print("URL utilisée :", url)
+        response = requests.post(url, headers=self.headers,  verify=False)
+        return response
     
     
     
