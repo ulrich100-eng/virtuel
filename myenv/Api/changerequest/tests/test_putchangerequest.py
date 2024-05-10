@@ -11,6 +11,8 @@ def api_changerequest():
 
 def test_putchangerequest_valid_data(api_changerequest):
     
+    api_changerequest  = Apichangerequest 
+    
     data = {
          
         "name": "ocm",
@@ -55,6 +57,8 @@ def test_putchangerequest_valid_data(api_changerequest):
 
 
 def test_putchangerequest_invalid_token(api_changerequest):
+    
+    api_changerequest  = Apichangerequest 
    
     data = { 
         "name": "string",
@@ -99,7 +103,7 @@ def test_putchangerequest_invalid_token(api_changerequest):
  
  
 def test_putchangerequest_value_error_on_fields(api_changerequest):
-   
+    api_changerequest  = Apichangerequest
     data = { 
         "name": 2,
         "holderCuid": "string",
@@ -142,7 +146,7 @@ def test_putchangerequest_value_error_on_fields(api_changerequest):
 
 
 def test_putchangerequest_value_error_on_state_field(api_changerequest):
-   
+    api_changerequest  = Apichangerequest
     data = { 
         "name": "string",
         "holderCuid": "string",

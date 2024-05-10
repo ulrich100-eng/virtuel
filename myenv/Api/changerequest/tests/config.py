@@ -14,4 +14,4 @@ def pytest_configure(config):
     config.option.excelreport = True
 
     # Génération du rapport excel
-    config.option.excelpath = 'reports/' + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".xls"
+    config.option.excelpath = 'reports/' + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".xlsx"

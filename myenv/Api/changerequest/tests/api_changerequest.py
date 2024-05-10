@@ -37,11 +37,11 @@ class Apichangerequest:
          
          
          
-    def post_changerequest(self,data):
+    def post_changerequest(self):
         
         url = BASE_URL
         print("URL utilisée :", url)
-        response = requests.post(url,   json=data ,  headers=self.headers , verify=False)
+        response = requests.post(url,     headers=self.headers , verify=False)
         
         return response
     
