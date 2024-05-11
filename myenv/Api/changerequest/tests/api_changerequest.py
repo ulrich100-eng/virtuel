@@ -16,32 +16,27 @@ class Apichangerequest:
         }
          
          
-        self.idput =   "23074633-2087-40af-8d7e-7af69576a62e"
+        self.idput =   "7ad17c47-c2bd-45b0-bbba-1c1dec0379ab"
         
         
-        self.idelete = "cd938521-38ef-44fa-bb02-d613c71455a5"
+        self.idelete = "3e3f768d-82d3-4bea-a244-4a1dea04d5d1"
+         
+        self.state = "Filters=state == 0"
+      
+        self.paramsearch = "SortOrder=SortOrder = -startDate&PageNumber=1&Filters=state == 0&PageSize=1"
          
          
-        self.paramslist = {
+        self.pa = {
+            'PageNumber': 1,
+            'PageSize': 1,
             
-            'Filters': 'state==0'
-        }
-        
-        
-        self.paramsearch = {
-            'PageNumber': 2,
-            'PageSize': 2,
-            'SortOrder': 'SortOrder = -startDate',
-            'Filters': 'state==0'
         }
          
-         
-         
-    def post_changerequest(self):
+    def post_changerequest(self,data):
         
         url = BASE_URL
         print("URL utilisée :", url)
-        response = requests.post(url,     headers=self.headers , verify=False)
+        response = requests.post(url,json=data , headers=self.headers , verify=False)
         
         return response
     
@@ -53,7 +48,7 @@ class Apichangerequest:
         
         print("URL utilisée :", url)
         
-        response = requests.put(url, json=data , headers=self.headers , verify=False )
+        response = requests.put(url,  json=data , headers=self.headers , verify=False )
         
         return response
 
@@ -72,9 +67,9 @@ class Apichangerequest:
     
     def get_listchangerequest(self):
         
-        url =  f"{BASE_URL}"
+        url =  f"{BASE_URL}?{self.state}"
         print("URL utilisée :", url)
-        response = requests.get(url, headers=self.headers , verify=False, params=self.paramslist)
+        response = requests.get(url, headers=self.headers , verify=False, params=self.state)
         
         return response
         
@@ -82,7 +77,7 @@ class Apichangerequest:
 
     def get_searchangerequest(self):
         
-        url =  f"{BASE_URL}"
+        url =  f"{BASE_URL}?{self.paramsearch}"
         print("URL utilisée :", url)
         response = requests.get(url, headers=self.headers , verify=False, params=self.paramsearch)
         
