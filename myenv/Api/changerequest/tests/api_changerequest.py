@@ -23,14 +23,9 @@ class Apichangerequest:
          
         self.state = "Filters=state == 0"
       
-        self.paramsearch = "SortOrder=SortOrder = -startDate&PageNumber=1&Filters=state == 0&PageSize=1"
+        self.paramsearch = "SortOrder = -startDate&PageNumber=1&Filters=state == 0&PageSize=1"
          
-         
-        self.pa = {
-            'PageNumber': 1,
-            'PageSize': 1,
-            
-        }
+       
          
     def post_changerequest(self,data):
         

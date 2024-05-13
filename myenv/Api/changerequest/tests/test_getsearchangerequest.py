@@ -32,7 +32,7 @@ def test_getsearchangerequest_invalid_token(api_changerequest):
 
 def test_getsearchangerequest_no_token(api_changerequest):
 
-    api_changerequest.headers['Authorization'] = 'Bearer token_invalid'
+    api_changerequest.headers['Authorization'] = ''
     response = api_changerequest.get_searchangerequest()
     
     
@@ -43,22 +43,23 @@ def test_getsearchangerequest_no_token(api_changerequest):
 def test_getsearchangerequest_wrong_value_on_field_pagesize(api_changerequest):
     
    
-    api_changerequest.pa['PageSize'] = 'ocm'
+    api_changerequest.paramsearch = api_changerequest.paramsearch.replace('&PageSize=1', '&PageSize=+')
     response = api_changerequest.get_searchangerequest()
     assert response.status_code == 400       
    
    
 def test_getsearchangerequest_wrong_value_on_field_pagenumber(api_changerequest):
     
-   
-    api_changerequest.paramslist['PageSize'] = 'ocm'
+    api_changerequest.paramsearch = api_changerequest.paramsearch.replace('&PageNumber=1', '&PageNumber=+')
+    
     response = api_changerequest.get_searchangerequest()
-    assert response.status_code == 400      
+    
+    assert response.status_code == 400     
     
     
 def test_getsearchangerequest_no_value_on_field_pagenumber(api_changerequest):
     
-    api_changerequest.paramslist['PageNumber'] = ''
+    api_changerequest.paramsearch = api_changerequest.paramsearch.replace('&PageNumber=1', '&PageNumber=')
    
     response = api_changerequest.get_searchangerequest()
     assert response.status_code == 400       
@@ -68,7 +69,7 @@ def test_getsearchangerequest_no_value_on_field_pagenumber(api_changerequest):
 def test_getsearchangerequest_no_value_on_field_pagesize(api_changerequest):
     
     
-    api_changerequest.paramslist['PageSize'] = ''
+    api_changerequest.paramsearch = api_changerequest.paramsearch.replace('&PageSize=1', '&PageSize=')
     response = api_changerequest.get_searchangerequest()
     assert response.status_code == 400       
     
