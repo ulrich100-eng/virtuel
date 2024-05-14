@@ -12,11 +12,11 @@ class Apichange:
        
         self.base_url = BASE_URL
         
-        # self.headers = {
-        #       'Accept' = 'application/json',
-        #       'Content-Type'= 'application/json',
-        #      'Authorization' : authorization_token
-        # }
+        self.headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': AUTHORIZATION_TOKEN
+        }
          
         # AUTHORIZATION_TOKEN = 'YOUR_AUTHORIZATION_TOKEN_HERE'
         # request_object = MyRequest(AUTHORIZATION_TOKEN)
@@ -41,11 +41,13 @@ class Apichange:
          
          
          
-    def send_post_request(self):
+          
+    def post_changerequestperf(self,data):
         
         url = BASE_URL
         print("URL utilisée :", url)
-        response = requests.post(url, headers=self.headers,  verify=False)
+        response = requests.post(url,json=data , headers=self.headers , verify=False)
+        
         return response
     
     
