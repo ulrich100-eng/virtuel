@@ -6,9 +6,9 @@ import time
 import multiprocessing
 # from Api.changerequest.testsf.api_change import Apichange
 
-API_URL = "http://localhost:3000/hello"  # Remplacez ceci par l'URL de votre API
+API_URL = "https://change-request.perfit.apps.dev.orange.local/api/changerequests"  # Remplacez ceci par l'URL de votre API
 
-
+TOKEN = "your_bearer_token"
 
 
 # def api_change():
@@ -27,7 +27,7 @@ def test_api_performance(num_requests):
 
 def send_request():
     start_time = time.time()
-    response = requests.get(API_URL)
+    response = requests.get(API_URL,verify=False,headers={"Authorization": f"Bearer {TOKEN}"})
     end_time = time.time()
     response_time = end_time - start_time
     print("Temps  d'exécution d'une requete:", response_time)
