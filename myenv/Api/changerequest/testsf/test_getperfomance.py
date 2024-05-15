@@ -14,7 +14,6 @@ API_URL = "http://localhost:3000/hello"  # Remplacez ceci par l'URL de votre API
 # def api_change():
 #     return Apichange()
 
-
 @pytest.mark.parametrize("num_requests", [9, 100, 1000])
 @pytest.mark.performance
 def test_api_performance(num_requests):
