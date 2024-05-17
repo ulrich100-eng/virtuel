@@ -23,7 +23,6 @@ BASE_URL = 'https://change-request.perfit.apps.dev.orange.local/api/changereques
 @pytest.mark.parametrize("num_requests", [1, 100, 1000])
 
 
-@pytest.mark.performance
 def test_api_performance(num_requests):
     if num_requests == 1:
         normal_load_scenario()
