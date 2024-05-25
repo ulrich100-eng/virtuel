@@ -7,7 +7,7 @@ from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous
 
 
 
-def run(nb):
+def running(nb):
     
     api_change = Apichange()
     # Vous pouvez ajuster ce nombre selon vos besoins
@@ -130,8 +130,8 @@ def run(nb):
     
 @pytest.mark.parametrize('nb', [10, 100, 500 ,1000] )
 def test_putperf(nb):
-    for id in range(1):  # Répétez le test 5 fois pour chaque valeur de nb
-        run(nb)
+    for id in range(1):  # Répétez le test 1 foi pour chaque valeur de nb
+        running(nb)
         
         
 

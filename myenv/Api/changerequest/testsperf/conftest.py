@@ -20,7 +20,7 @@ def pytest_configure(config):
     config.option.self_contained_html = True
 
     # Génération du rapport excel
-   # config.option.excelreport = True
+    config.option.excelreport = True
 
     # Génération du rapport excel
-    # config.option.excelpath = 'reports/' + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".xlsx"
+    config.option.excelpath = 'reports/' + datetime.now().strftime("%d-%m-%Y %H-%M-%S") + ".xlsx"
