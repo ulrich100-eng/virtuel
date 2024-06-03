@@ -1,7 +1,7 @@
 import pytest
 import time
 import concurrent.futures  
-from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous que le chemin est correct
+from Api.changerequest.testsperf.api_changeperf import Apichangeperf  # Assurez-vous que le chemin est correct
 
 
 
@@ -9,7 +9,7 @@ from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous
 
 def running(nb):
     
-    api_change = Apichange()
+    api_changeperf = Apichangeperf()
     # Vous pouvez ajuster ce nombre selon vos besoins
     # Corps de la requête à envoyer
     data = {
@@ -65,7 +65,7 @@ def running(nb):
     # Exécution des requêtes en parallèle avec ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:
             # Map les données avec les requêtes et stocke les résultats
-        results = list(executor.map(lambda data: api_change.put_changeperf(data), data_list))
+        results = list(executor.map(lambda data: api_changeperf.put_changeperf(data), data_list))
     end_time = time.time()  # Temps de fin
     
     # response_times = []  # Liste pour stocker les temps de réponse de chaque requête

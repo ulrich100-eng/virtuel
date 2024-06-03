@@ -1,7 +1,7 @@
 import pytest
 import time
 import concurrent.futures  
-from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous que le chemin est correct
+from Api.changerequest.testsperf.api_changeperf import Apichangeperf  # Assurez-vous que le chemin est correct
 
 
 
@@ -9,7 +9,7 @@ from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous
 
 def delist(nb):
     
-    api_change = Apichange()
+    api_changeperf = Apichangeperf()
     
     print(f"Received nb: {nb}")
     
@@ -20,7 +20,7 @@ def delist(nb):
     print(f"Running test with {nb} requests")
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:
-        results = list(executor.map(lambda _: api_change.delete_changeperf(), range(nb)))
+        results = list(executor.map(lambda _: api_changeperf.delete_changeperf(), range(nb)))
     
     end_time = time.time()
 

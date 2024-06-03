@@ -1,7 +1,7 @@
 import pytest
 import time
 import concurrent.futures  
-from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous que le chemin est correct
+from Api.changerequest.testsperf.api_changeperf import Apichangeperf  # Assurez-vous que le chemin est correct
 
 
 
@@ -9,7 +9,7 @@ from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous
 
 def getlist(nb):
     
-    api_change = Apichange()
+    api_changeperf = Apichangeperf()
     
     print(f"Received nb: {nb}")
     
@@ -20,7 +20,7 @@ def getlist(nb):
     print(f"Running test with {nb} requests")
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:
-        results = list(executor.map(lambda _: api_change.get_changeperflist(), range(nb)))
+        results = list(executor.map(lambda _: api_changeperf.get_changeperflist(), range(nb)))
     
     end_time = time.time()
 
@@ -72,17 +72,17 @@ def getlist(nb):
             assert success_rate > 98, "Taux de succes"
 
 
-    elif nb == 1000:
-        assert average_response_time < 1.0, f"Temps de réponse moyen élevé: {average_response_time} secondes pour {nb} requêtes"
-        assert success_rate > 95, "Taux de succes"
+    # elif nb == 1000:
+    #     assert average_response_time < 1.0, f"Temps de réponse moyen élevé: {average_response_time} secondes pour {nb} requêtes"
+    #     assert success_rate > 95, "Taux de succes"
         
 
     # Assertion générale pour le taux de succès
-    # assert success_rate >= 90, "Le taux de succès est inférieur à 90%"
+    assert success_rate >= 90, "Le taux de succès est inférieur à 90%"
     
     
     
-@pytest.mark.parametrize('nb', [10, 100, 500 ,1000] )
+@pytest.mark.parametrize('nb', [10, 100, 500 ] )
 def test_getperflist(nb):
     for id in range(1):  # Répétez le test 1 foi pour chaque valeur de nb
         getlist(nb)

@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title id="head-title">01-06-2024 17-01-31.html</title>
+      <style type="text/css">body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+#environment ul {
+  margin: 0;
+  padding: 0 20px;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+.col-links__extra {
+  margin-right: 3px;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.logwrapper {
+  max-height: 230px;
+  overflow-y: scroll;
+  background-color: #e6e6e6;
+}
+.logwrapper.expanded {
+  max-height: none;
+}
+.logwrapper.expanded .logexpander:after {
+  content: "collapse [-]";
+}
+.logwrapper .logexpander {
+  z-index: 1;
+  position: sticky;
+  top: 10px;
+  width: max-content;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px 7px;
+  margin: 10px 0 10px calc(100% - 80px);
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+.logwrapper .logexpander:after {
+  content: "expand [+]";
+}
+.logwrapper .logexpander:hover {
+  color: #000;
+  border-color: #000;
+}
+.logwrapper .log {
+  min-height: 40px;
+  position: relative;
+  top: -50px;
+  height: calc(100% + 50px);
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  padding: 5px;
+  padding-right: 80px;
+  white-space: pre-wrap;
+}
+
+div.media {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin: 0 5px;
+  overflow: hidden;
+  width: 320px;
+}
+
+.media-container {
+  display: grid;
+  grid-template-columns: 25px auto 25px;
+  align-items: center;
+  flex: 1 1;
+  overflow: hidden;
+  height: 200px;
+}
+
+.media-container--fullscreen {
+  grid-template-columns: 0px auto 0px;
+}
+
+.media-container__nav--right,
+.media-container__nav--left {
+  text-align: center;
+  cursor: pointer;
+}
+
+.media-container__viewport {
+  cursor: pointer;
+  text-align: center;
+  height: inherit;
+}
+.media-container__viewport img,
+.media-container__viewport video {
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+}
+
+.media__name,
+.media__counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 0 0 25px;
+  align-items: center;
+}
+
+.collapsible td:not(.col-links) {
+  cursor: pointer;
+}
+.collapsible td:not(.col-links):hover::after {
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.col-result {
+  width: 130px;
+}
+.col-result:hover::after {
+  content: " (hide details)";
+}
+
+.col-result.collapsed:hover::after {
+  content: " (show details)";
+}
+
+#environment-header h2:hover::after {
+  content: " (hide details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#environment-header.collapsed h2:hover::after {
+  content: " (show details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+.sortable.desc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: -12.5px;
+  border: 10px solid #4caf50;
+  border-bottom: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.sortable.asc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: 12.5px;
+  border: 10px solid #4caf50;
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.hidden, .summary__reload__button.hidden {
+  display: none;
+}
+
+.summary__data {
+  flex: 0 0 550px;
+}
+.summary__reload {
+  flex: 1 1;
+  display: flex;
+  justify-content: center;
+}
+.summary__reload__button {
+  flex: 0 0 300px;
+  display: flex;
+  color: white;
+  font-weight: bold;
+  background-color: #4caf50;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.summary__reload__button:hover {
+  background-color: #46a049;
+}
+.summary__spacer {
+  flex: 0 0 550px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters,
+.collapse {
+  display: flex;
+  align-items: center;
+}
+.filters button,
+.collapse button {
+  color: #999;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.filters button:hover,
+.collapse button:hover {
+  color: #ccc;
+}
+
+.filter__label {
+  margin-right: 10px;
+}
+
+      </style>
+    
+  </head>
+  <body>
+    <h1 id="title">01-06-2024 17-01-31.html</h1>
+    <p>Report generated on 01-Jun-2024 at 17:01:54 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.1.1</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+        </div>
+        <p class="run-count">3 tests took 00:00:22.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
+            <span class="failed">3 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" disabled/>
+            <span class="passed">0 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Expected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" disabled/>
+            <span class="rerun">0 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.11.4&#34;, &#34;Platform&#34;: &#34;Windows-10-10.0.19045-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.2.0&#34;, &#34;pluggy&#34;: &#34;1.5.0&#34;}, &#34;Plugins&#34;: {&#34;allure-pytest&#34;: &#34;2.12.0&#34;, &#34;benchmark&#34;: &#34;4.0.0&#34;, &#34;csv&#34;: &#34;3.0.0&#34;, &#34;excel&#34;: &#34;1.6.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;, &#34;xdist&#34;: &#34;3.5.0&#34;, &#34;xlsx&#34;: &#34;1.0.36.0&#34;}}, &#34;tests&#34;: {&#34;test_putcloseperf.py::test_putcloseperf[10]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putcloseperf.py::test_putcloseperf[10]&#34;, &#34;duration&#34;: &#34;00:00:01&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putcloseperf.py::test_putcloseperf[10]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:01&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 10\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ] )\n    def test_putcloseperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           putclose(nb)\n\ntest_putcloseperf.py:88: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nnb = 10\n\n    def putclose(nb):\n    \n        api_change = Apichange()\n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)\n    \n        failure_count = 0\n        success_count = 0\n    \n        start_time = time.time()\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)\n    \n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n            results = list(executor.map(lambda _: api_change.put_closeperf(), range(nb)))\n    \n        end_time = time.time()\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;           assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\nE           AssertionError: Taux de succes \nE           assert 0.0 &amp;gt; 98\n\ntest_putcloseperf.py:62: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 10\nRunning test with 10 requests\nTemps de reponse d&amp;#x27;une requete : 1.071824\nTemps de reponse d&amp;#x27;une requete : 0.801637\nTemps de reponse d&amp;#x27;une requete : 0.898324\nTemps de reponse d&amp;#x27;une requete : 0.66489\nTemps de reponse d&amp;#x27;une requete : 1.086088\nTemps de reponse d&amp;#x27;une requete : 0.893186\nTemps de reponse d&amp;#x27;une requete : 0.960143\nTemps de reponse d&amp;#x27;une requete : 0.926941\nTemps de reponse d&amp;#x27;une requete : 0.559487\nTemps de reponse d&amp;#x27;une requete : 0.55848\nTemps total d&amp;#x27;ex\u00e9cution : 1.1013545989990234\nTemps de r\u00e9ponse moyen : 0.11013545989990234 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 9.079727827067318\n&#34;}], &#34;test_putcloseperf.py::test_putcloseperf[100]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putcloseperf.py::test_putcloseperf[100]&#34;, &#34;duration&#34;: &#34;00:00:03&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putcloseperf.py::test_putcloseperf[100]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:03&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 100\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ] )\n    def test_putcloseperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           putclose(nb)\n\ntest_putcloseperf.py:88: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nnb = 100\n\n    def putclose(nb):\n    \n        api_change = Apichange()\n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)\n    \n        failure_count = 0\n        success_count = 0\n    \n        start_time = time.time()\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)\n    \n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n            results = list(executor.map(lambda _: api_change.put_closeperf(), range(nb)))\n    \n        end_time = time.time()\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\n    \n        # Assertions pour les requ\u00eates moyennes (nb = 100)\n        elif nb == 100:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;           assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\nE           AssertionError: Taux de succes\nE           assert 0.0 &amp;gt; 98\n\ntest_putcloseperf.py:67: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 100\nRunning test with 100 requests\nTemps de reponse d&amp;#x27;une requete : 0.269499\nTemps de reponse d&amp;#x27;une requete : 0.191352\nTemps de reponse d&amp;#x27;une requete : 0.364455\nTemps de reponse d&amp;#x27;une requete : 0.782602\nTemps de reponse d&amp;#x27;une requete : 0.437576\nTemps de reponse d&amp;#x27;une requete : 0.361912\nTemps de reponse d&amp;#x27;une requete : 0.452138\nTemps de reponse d&amp;#x27;une requete : 0.322375\nTemps de reponse d&amp;#x27;une requete : 0.584779\nTemps de reponse d&amp;#x27;une requete : 0.801799\nTemps de reponse d&amp;#x27;une requete : 0.613589\nTemps de reponse d&amp;#x27;une requete : 0.468442\nTemps de reponse d&amp;#x27;une requete : 0.490186\nTemps de reponse d&amp;#x27;une requete : 0.887532\nTemps de reponse d&amp;#x27;une requete : 0.482989\nTemps de reponse d&amp;#x27;une requete : 0.365468\nTemps de reponse d&amp;#x27;une requete : 0.604724\nTemps de reponse d&amp;#x27;une requete : 0.994663\nTemps de reponse d&amp;#x27;une requete : 0.784093\nTemps de reponse d&amp;#x27;une requete : 0.495525\nTemps de reponse d&amp;#x27;une requete : 0.769072\nTemps de reponse d&amp;#x27;une requete : 0.599669\nTemps de reponse d&amp;#x27;une requete : 0.383501\nTemps de reponse d&amp;#x27;une requete : 0.381972\nTemps de reponse d&amp;#x27;une requete : 0.829329\nTemps de reponse d&amp;#x27;une requete : 0.76947\nTemps de reponse d&amp;#x27;une requete : 0.489278\nTemps de reponse d&amp;#x27;une requete : 0.669271\nTemps de reponse d&amp;#x27;une requete : 0.657478\nTemps de reponse d&amp;#x27;une requete : 0.515031\nTemps de reponse d&amp;#x27;une requete : 0.598856\nTemps de reponse d&amp;#x27;une requete : 0.605764\nTemps de reponse d&amp;#x27;une requete : 0.412322\nTemps de reponse d&amp;#x27;une requete : 0.52579\nTemps de reponse d&amp;#x27;une requete : 0.522115\nTemps de reponse d&amp;#x27;une requete : 0.513387\nTemps de reponse d&amp;#x27;une requete : 0.618859\nTemps de reponse d&amp;#x27;une requete : 0.778598\nTemps de reponse d&amp;#x27;une requete : 0.433388\nTemps de reponse d&amp;#x27;une requete : 0.516357\nTemps de reponse d&amp;#x27;une requete : 0.438054\nTemps de reponse d&amp;#x27;une requete : 0.613885\nTemps de reponse d&amp;#x27;une requete : 0.485245\nTemps de reponse d&amp;#x27;une requete : 0.685142\nTemps de reponse d&amp;#x27;une requete : 0.570676\nTemps de reponse d&amp;#x27;une requete : 0.624596\nTemps de reponse d&amp;#x27;une requete : 0.5266\nTemps de reponse d&amp;#x27;une requete : 0.675402\nTemps de reponse d&amp;#x27;une requete : 0.616912\nTemps de reponse d&amp;#x27;une requete : 0.914525\nTemps de reponse d&amp;#x27;une requete : 0.607719\nTemps de reponse d&amp;#x27;une requete : 0.921072\nTemps de reponse d&amp;#x27;une requete : 0.960237\nTemps de reponse d&amp;#x27;une requete : 0.785346\nTemps de reponse d&amp;#x27;une requete : 0.677824\nTemps de reponse d&amp;#x27;une requete : 0.495029\nTemps de reponse d&amp;#x27;une requete : 0.671488\nTemps de reponse d&amp;#x27;une requete : 0.43893\nTemps de reponse d&amp;#x27;une requete : 0.502293\nTemps de reponse d&amp;#x27;une requete : 0.479389\nTemps de reponse d&amp;#x27;une requete : 0.529878\nTemps de reponse d&amp;#x27;une requete : 0.321625\nTemps de reponse d&amp;#x27;une requete : 0.517838\nTemps de reponse d&amp;#x27;une requete : 1.002636\nTemps de reponse d&amp;#x27;une requete : 0.925202\nTemps de reponse d&amp;#x27;une requete : 0.925244\nTemps de reponse d&amp;#x27;une requete : 0.921877\nTemps de reponse d&amp;#x27;une requete : 0.943328\nTemps de reponse d&amp;#x27;une requete : 0.469924\nTemps de reponse d&amp;#x27;une requete : 1.228354\nTemps de reponse d&amp;#x27;une requete : 0.777055\nTemps de reponse d&amp;#x27;une requete : 0.918057\nTemps de reponse d&amp;#x27;une requete : 0.466381\nTemps de reponse d&amp;#x27;une requete : 0.637913\nTemps de reponse d&amp;#x27;une requete : 0.910874\nTemps de reponse d&amp;#x27;une requete : 0.801905\nTemps de reponse d&amp;#x27;une requete : 1.209368\nTemps de reponse d&amp;#x27;une requete : 0.792159\nTemps de reponse d&amp;#x27;une requete : 0.770017\nTemps de reponse d&amp;#x27;une requete : 0.725233\nTemps de reponse d&amp;#x27;une requete : 0.75183\nTemps de reponse d&amp;#x27;une requete : 0.843801\nTemps de reponse d&amp;#x27;une requete : 1.129004\nTemps de reponse d&amp;#x27;une requete : 0.948637\nTemps de reponse d&amp;#x27;une requete : 0.856645\nTemps de reponse d&amp;#x27;une requete : 0.871445\nTemps de reponse d&amp;#x27;une requete : 0.579981\nTemps de reponse d&amp;#x27;une requete : 0.80457\nTemps de reponse d&amp;#x27;une requete : 0.660487\nTemps de reponse d&amp;#x27;une requete : 0.679052\nTemps de reponse d&amp;#x27;une requete : 0.567775\nTemps de reponse d&amp;#x27;une requete : 0.654758\nTemps de reponse d&amp;#x27;une requete : 0.640164\nTemps de reponse d&amp;#x27;une requete : 0.644546\nTemps de reponse d&amp;#x27;une requete : 0.656408\nTemps de reponse d&amp;#x27;une requete : 0.661293\nTemps de reponse d&amp;#x27;une requete : 0.696629\nTemps de reponse d&amp;#x27;une requete : 0.602762\nTemps de reponse d&amp;#x27;une requete : 0.58295\nTemps de reponse d&amp;#x27;une requete : 0.398641\nTemps total d&amp;#x27;ex\u00e9cution : 3.1438381671905518\nTemps de r\u00e9ponse moyen : 0.03143838167190552 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 31.80825305946446\n&#34;}], &#34;test_putcloseperf.py::test_putcloseperf[500]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putcloseperf.py::test_putcloseperf[500]&#34;, &#34;duration&#34;: &#34;00:00:18&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putcloseperf.py::test_putcloseperf[500]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:18&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 500\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ] )\n    def test_putcloseperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           putclose(nb)\n\ntest_putcloseperf.py:88: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nnb = 500\n\n    def putclose(nb):\n    \n        api_change = Apichange()\n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)\n    \n        failure_count = 0\n        success_count = 0\n    \n        start_time = time.time()\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)\n    \n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n            results = list(executor.map(lambda _: api_change.put_closeperf(), range(nb)))\n    \n        end_time = time.time()\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\n    \n        # Assertions pour les requ\u00eates moyennes (nb = 100)\n        elif nb == 100:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\n    \n    \n        elif nb == 500:\n                assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;               assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\nE               AssertionError: Taux de succes\nE               assert 0.0 &amp;gt; 98\n\ntest_putcloseperf.py:72: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 500\nRunning test with 500 requests\nTemps de reponse d&amp;#x27;une requete : 0.234\nTemps de reponse d&amp;#x27;une requete : 0.434166\nTemps de reponse d&amp;#x27;une requete : 0.503876\nTemps de reponse d&amp;#x27;une requete : 0.568711\nTemps de reponse d&amp;#x27;une requete : 0.504914\nTemps de reponse d&amp;#x27;une requete : 0.592499\nTemps de reponse d&amp;#x27;une requete : 0.501922\nTemps de reponse d&amp;#x27;une requete : 0.614083\nTemps de reponse d&amp;#x27;une requete : 0.680114\nTemps de reponse d&amp;#x27;une requete : 0.436361\nTemps de reponse d&amp;#x27;une requete : 0.316709\nTemps de reponse d&amp;#x27;une requete : 0.304561\nTemps de reponse d&amp;#x27;une requete : 0.620123\nTemps de reponse d&amp;#x27;une requete : 0.540171\nTemps de reponse d&amp;#x27;une requete : 0.620175\nTemps de reponse d&amp;#x27;une requete : 0.801707\nTemps de reponse d&amp;#x27;une requete : 0.785171\nTemps de reponse d&amp;#x27;une requete : 0.461512\nTemps de reponse d&amp;#x27;une requete : 0.767844\nTemps de reponse d&amp;#x27;une requete : 0.762488\nTemps de reponse d&amp;#x27;une requete : 0.870026\nTemps de reponse d&amp;#x27;une requete : 0.531872\nTemps de reponse d&amp;#x27;une requete : 0.582458\nTemps de reponse d&amp;#x27;une requete : 0.569093\nTemps de reponse d&amp;#x27;une requete : 0.744524\nTemps de reponse d&amp;#x27;une requete : 1.086592\nTemps de reponse d&amp;#x27;une requete : 0.416353\nTemps de reponse d&amp;#x27;une requete : 1.009669\nTemps de reponse d&amp;#x27;une requete : 0.610478\nTemps de reponse d&amp;#x27;une requete : 4.031606\nTemps de reponse d&amp;#x27;une requete : 0.84459\nTemps de reponse d&amp;#x27;une requete : 1.680382\nTemps de reponse d&amp;#x27;une requete : 0.538872\nTemps de reponse d&amp;#x27;une requete : 0.529502\nTemps de reponse d&amp;#x27;une requete : 1.483597\nTemps de reponse d&amp;#x27;une requete : 2.015166\nTemps de reponse d&amp;#x27;une requete : 1.58882\nTemps de reponse d&amp;#x27;une requete : 3.562526\nTemps de reponse d&amp;#x27;une requete : 1.879167\nTemps de reponse d&amp;#x27;une requete : 3.535437\nTemps de reponse d&amp;#x27;une requete : 1.306816\nTemps de reponse d&amp;#x27;une requete : 0.851219\nTemps de reponse d&amp;#x27;une requete : 0.80126\nTemps de reponse d&amp;#x27;une requete : 1.207186\nTemps de reponse d&amp;#x27;une requete : 1.402202\nTemps de reponse d&amp;#x27;une requete : 0.998523\nTemps de reponse d&amp;#x27;une requete : 0.72768\nTemps de reponse d&amp;#x27;une requete : 3.306612\nTemps de reponse d&amp;#x27;une requete : 0.578703\nTemps de reponse d&amp;#x27;une requete : 1.377098\nTemps de reponse d&amp;#x27;une requete : 2.713112\nTemps de reponse d&amp;#x27;une requete : 2.857419\nTemps de reponse d&amp;#x27;une requete : 2.780796\nTemps de reponse d&amp;#x27;une requete : 1.358399\nTemps de reponse d&amp;#x27;une requete : 2.744611\nTemps de reponse d&amp;#x27;une requete : 1.161279\nTemps de reponse d&amp;#x27;une requete : 2.680689\nTemps de reponse d&amp;#x27;une requete : 2.575727\nTemps de reponse d&amp;#x27;une requete : 1.129242\nTemps de reponse d&amp;#x27;une requete : 2.785742\nTemps de reponse d&amp;#x27;une requete : 1.07235\nTemps de reponse d&amp;#x27;une requete : 2.609749\nTemps de reponse d&amp;#x27;une requete : 2.73869\nTemps de reponse d&amp;#x27;une requete : 1.076163\nTemps de reponse d&amp;#x27;une requete : 1.102941\nTemps de reponse d&amp;#x27;une requete : 2.541586\nTemps de reponse d&amp;#x27;une requete : 2.658222\nTemps de reponse d&amp;#x27;une requete : 2.538995\nTemps de reponse d&amp;#x27;une requete : 2.486097\nTemps de reponse d&amp;#x27;une requete : 2.77618\nTemps de reponse d&amp;#x27;une requete : 2.266735\nTemps de reponse d&amp;#x27;une requete : 2.525735\nTemps de reponse d&amp;#x27;une requete : 2.305196\nTemps de reponse d&amp;#x27;une requete : 2.373156\nTemps de reponse d&amp;#x27;une requete : 2.385502\nTemps de reponse d&amp;#x27;une requete : 1.99408\nTemps de reponse d&amp;#x27;une requete : 2.348893\nTemps de reponse d&amp;#x27;une requete : 2.225813\nTemps de reponse d&amp;#x27;une requete : 2.325851\nTemps de reponse d&amp;#x27;une requete : 2.379032\nTemps de reponse d&amp;#x27;une requete : 1.987351\nTemps de reponse d&amp;#x27;une requete : 2.085085\nTemps de reponse d&amp;#x27;une requete : 1.89856\nTemps de reponse d&amp;#x27;une requete : 1.671171\nTemps de reponse d&amp;#x27;une requete : 2.032609\nTemps de reponse d&amp;#x27;une requete : 1.949554\nTemps de reponse d&amp;#x27;une requete : 1.891573\nTemps de reponse d&amp;#x27;une requete : 1.969546\nTemps de reponse d&amp;#x27;une requete : 2.024746\nTemps de reponse d&amp;#x27;une requete : 1.847678\nTemps de reponse d&amp;#x27;une requete : 1.931426\nTemps de reponse d&amp;#x27;une requete : 1.859733\nTemps de reponse d&amp;#x27;une requete : 1.860359\nTemps de reponse d&amp;#x27;une requete : 1.53745\nTemps de reponse d&amp;#x27;une requete : 1.784214\nTemps de reponse d&amp;#x27;une requete : 1.576602\nTemps de reponse d&amp;#x27;une requete : 1.670607\nTemps de reponse d&amp;#x27;une requete : 1.42633\nTemps de reponse d&amp;#x27;une requete : 1.405167\nTemps de reponse d&amp;#x27;une requete : 1.393084\nTemps de reponse d&amp;#x27;une requete : 1.544959\nTemps de reponse d&amp;#x27;une requete : 1.787563\nTemps de reponse d&amp;#x27;une requete : 1.509015\nTemps de reponse d&amp;#x27;une requete : 1.50926\nTemps de reponse d&amp;#x27;une requete : 1.625048\nTemps de reponse d&amp;#x27;une requete : 1.470469\nTemps de reponse d&amp;#x27;une requete : 1.622835\nTemps de reponse d&amp;#x27;une requete : 1.706898\nTemps de reponse d&amp;#x27;une requete : 1.223642\nTemps de reponse d&amp;#x27;une requete : 0.999705\nTemps de reponse d&amp;#x27;une requete : 1.019605\nTemps de reponse d&amp;#x27;une requete : 1.216793\nTemps de reponse d&amp;#x27;une requete : 1.216703\nTemps de reponse d&amp;#x27;une requete : 1.201915\nTemps de reponse d&amp;#x27;une requete : 1.106984\nTemps de reponse d&amp;#x27;une requete : 1.050957\nTemps de reponse d&amp;#x27;une requete : 1.145416\nTemps de reponse d&amp;#x27;une requete : 0.819475\nTemps de reponse d&amp;#x27;une requete : 1.104911\nTemps de reponse d&amp;#x27;une requete : 0.923004\nTemps de reponse d&amp;#x27;une requete : 0.901546\nTemps de reponse d&amp;#x27;une requete : 1.0101\nTemps de reponse d&amp;#x27;une requete : 0.856586\nTemps de reponse d&amp;#x27;une requete : 0.791357\nTemps de reponse d&amp;#x27;une requete : 0.843176\nTemps de reponse d&amp;#x27;une requete : 0.768073\nTemps de reponse d&amp;#x27;une requete : 0.723439\nTemps de reponse d&amp;#x27;une requete : 0.835918\nTemps de reponse d&amp;#x27;une requete : 0.556675\nTemps de reponse d&amp;#x27;une requete : 0.732561\nTemps de reponse d&amp;#x27;une requete : 0.645421\nTemps de reponse d&amp;#x27;une requete : 0.727763\nTemps de reponse d&amp;#x27;une requete : 0.789788\nTemps de reponse d&amp;#x27;une requete : 0.571323\nTemps de reponse d&amp;#x27;une requete : 0.614816\nTemps de reponse d&amp;#x27;une requete : 0.822008\nTemps de reponse d&amp;#x27;une requete : 0.493868\nTemps de reponse d&amp;#x27;une requete : 0.867427\nTemps de reponse d&amp;#x27;une requete : 0.498265\nTemps de reponse d&amp;#x27;une requete : 0.920376\nTemps de reponse d&amp;#x27;une requete : 0.838792\nTemps de reponse d&amp;#x27;une requete : 0.719037\nTemps de reponse d&amp;#x27;une requete : 0.677391\nTemps de reponse d&amp;#x27;une requete : 0.83459\nTemps de reponse d&amp;#x27;une requete : 1.10385\nTemps de reponse d&amp;#x27;une requete : 1.10253\nTemps de reponse d&amp;#x27;une requete : 1.103909\nTemps de reponse d&amp;#x27;une requete : 1.04266\nTemps de reponse d&amp;#x27;une requete : 0.85609\nTemps de reponse d&amp;#x27;une requete : 0.824619\nTemps de reponse d&amp;#x27;une requete : 0.60827\nTemps de reponse d&amp;#x27;une requete : 0.983878\nTemps de reponse d&amp;#x27;une requete : 0.458229\nTemps de reponse d&amp;#x27;une requete : 0.672889\nTemps de reponse d&amp;#x27;une requete : 1.329803\nTemps de reponse d&amp;#x27;une requete : 1.438228\nTemps de reponse d&amp;#x27;une requete : 1.011381\nTemps de reponse d&amp;#x27;une requete : 0.758127\nTemps de reponse d&amp;#x27;une requete : 1.332494\nTemps de reponse d&amp;#x27;une requete : 1.236828\nTemps de reponse d&amp;#x27;une requete : 0.980083\nTemps de reponse d&amp;#x27;une requete : 1.075478\nTemps de reponse d&amp;#x27;une requete : 0.662335\nTemps de reponse d&amp;#x27;une requete : 0.749059\nTemps de reponse d&amp;#x27;une requete : 1.345947\nTemps de reponse d&amp;#x27;une requete : 0.871754\nTemps de reponse d&amp;#x27;une requete : 1.291631\nTemps de reponse d&amp;#x27;une requete : 1.634529\nTemps de reponse d&amp;#x27;une requete : 0.992726\nTemps de reponse d&amp;#x27;une requete : 1.047419\nTemps de reponse d&amp;#x27;une requete : 1.092289\nTemps de reponse d&amp;#x27;une requete : 1.576896\nTemps de reponse d&amp;#x27;une requete : 1.30513\nTemps de reponse d&amp;#x27;une requete : 0.690786\nTemps de reponse d&amp;#x27;une requete : 1.046493\nTemps de reponse d&amp;#x27;une requete : 1.14235\nTemps de reponse d&amp;#x27;une requete : 2.035512\nTemps de reponse d&amp;#x27;une requete : 0.886499\nTemps de reponse d&amp;#x27;une requete : 0.984162\nTemps de reponse d&amp;#x27;une requete : 0.974631\nTemps de reponse d&amp;#x27;une requete : 1.36964\nTemps de reponse d&amp;#x27;une requete : 1.063958\nTemps de reponse d&amp;#x27;une requete : 1.082287\nTemps de reponse d&amp;#x27;une requete : 1.783969\nTemps de reponse d&amp;#x27;une requete : 0.620851\nTemps de reponse d&amp;#x27;une requete : 0.718307\nTemps de reponse d&amp;#x27;une requete : 0.848153\nTemps de reponse d&amp;#x27;une requete : 0.973547\nTemps de reponse d&amp;#x27;une requete : 1.276134\nTemps de reponse d&amp;#x27;une requete : 0.941011\nTemps de reponse d&amp;#x27;une requete : 1.47416\nTemps de reponse d&amp;#x27;une requete : 1.373359\nTemps de reponse d&amp;#x27;une requete : 1.044296\nTemps de reponse d&amp;#x27;une requete : 0.955244\nTemps de reponse d&amp;#x27;une requete : 0.943643\nTemps de reponse d&amp;#x27;une requete : 1.35427\nTemps de reponse d&amp;#x27;une requete : 1.29849\nTemps de reponse d&amp;#x27;une requete : 1.246856\nTemps de reponse d&amp;#x27;une requete : 1.782248\nTemps de reponse d&amp;#x27;une requete : 1.277186\nTemps de reponse d&amp;#x27;une requete : 0.815469\nTemps de reponse d&amp;#x27;une requete : 2.875509\nTemps de reponse d&amp;#x27;une requete : 0.833551\nTemps de reponse d&amp;#x27;une requete : 2.263862\nTemps de reponse d&amp;#x27;une requete : 2.132197\nTemps de reponse d&amp;#x27;une requete : 0.955043\nTemps de reponse d&amp;#x27;une requete : 1.950869\nTemps de reponse d&amp;#x27;une requete : 3.077053\nTemps de reponse d&amp;#x27;une requete : 1.137498\nTemps de reponse d&amp;#x27;une requete : 1.707529\nTemps de reponse d&amp;#x27;une requete : 1.331535\nTemps de reponse d&amp;#x27;une requete : 1.365597\nTemps de reponse d&amp;#x27;une requete : 2.823672\nTemps de reponse d&amp;#x27;une requete : 1.257506\nTemps de reponse d&amp;#x27;une requete : 1.040765\nTemps de reponse d&amp;#x27;une requete : 1.371\nTemps de reponse d&amp;#x27;une requete : 1.250863\nTemps de reponse d&amp;#x27;une requete : 1.005808\nTemps de reponse d&amp;#x27;une requete : 0.777765\nTemps de reponse d&amp;#x27;une requete : 1.55864\nTemps de reponse d&amp;#x27;une requete : 0.970796\nTemps de reponse d&amp;#x27;une requete : 2.832588\nTemps de reponse d&amp;#x27;une requete : 0.721704\nTemps de reponse d&amp;#x27;une requete : 2.776966\nTemps de reponse d&amp;#x27;une requete : 0.948373\nTemps de reponse d&amp;#x27;une requete : 2.852384\nTemps de reponse d&amp;#x27;une requete : 2.882302\nTemps de reponse d&amp;#x27;une requete : 3.404359\nTemps de reponse d&amp;#x27;une requete : 0.889586\nTemps de reponse d&amp;#x27;une requete : 0.804227\nTemps de reponse d&amp;#x27;une requete : 3.395972\nTemps de reponse d&amp;#x27;une requete : 2.079396\nTemps de reponse d&amp;#x27;une requete : 0.923571\nTemps de reponse d&amp;#x27;une requete : 2.187794\nTemps de reponse d&amp;#x27;une requete : 0.490663\nTemps de reponse d&amp;#x27;une requete : 2.2558\nTemps de reponse d&amp;#x27;une requete : 0.468603\nTemps de reponse d&amp;#x27;une requete : 1.038588\nTemps de reponse d&amp;#x27;une requete : 2.022942\nTemps de reponse d&amp;#x27;une requete : 1.98211\nTemps de reponse d&amp;#x27;une requete : 1.665397\nTemps de reponse d&amp;#x27;une requete : 1.917642\nTemps de reponse d&amp;#x27;une requete : 1.771678\nTemps de reponse d&amp;#x27;une requete : 1.297832\nTemps de reponse d&amp;#x27;une requete : 2.332293\nTemps de reponse d&amp;#x27;une requete : 0.554192\nTemps de reponse d&amp;#x27;une requete : 0.982616\nTemps de reponse d&amp;#x27;une requete : 1.501402\nTemps de reponse d&amp;#x27;une requete : 2.142691\nTemps de reponse d&amp;#x27;une requete : 2.081612\nTemps de reponse d&amp;#x27;une requete : 1.349159\nTemps de reponse d&amp;#x27;une requete : 1.416801\nTemps de reponse d&amp;#x27;une requete : 0.681569\nTemps de reponse d&amp;#x27;une requete : 2.108767\nTemps de reponse d&amp;#x27;une requete : 2.008387\nTemps de reponse d&amp;#x27;une requete : 1.378403\nTemps de reponse d&amp;#x27;une requete : 0.658866\nTemps de reponse d&amp;#x27;une requete : 1.976339\nTemps de reponse d&amp;#x27;une requete : 1.333892\nTemps de reponse d&amp;#x27;une requete : 1.376296\nTemps de reponse d&amp;#x27;une requete : 2.113798\nTemps de reponse d&amp;#x27;une requete : 0.941014\nTemps de reponse d&amp;#x27;une requete : 1.431554\nTemps de reponse d&amp;#x27;une requete : 1.459935\nTemps de reponse d&amp;#x27;une requete : 1.868207\nTemps de reponse d&amp;#x27;une requete : 1.585564\nTemps de reponse d&amp;#x27;une requete : 1.819087\nTemps de reponse d&amp;#x27;une requete : 1.906382\nTemps de reponse d&amp;#x27;une requete : 1.769774\nTemps de reponse d&amp;#x27;une requete : 1.094666\nTemps de reponse d&amp;#x27;une requete : 1.630324\nTemps de reponse d&amp;#x27;une requete : 1.330306\nTemps de reponse d&amp;#x27;une requete : 1.016199\nTemps de reponse d&amp;#x27;une requete : 1.535596\nTemps de reponse d&amp;#x27;une requete : 1.557339\nTemps de reponse d&amp;#x27;une requete : 1.52779\nTemps de reponse d&amp;#x27;une requete : 1.114946\nTemps de reponse d&amp;#x27;une requete : 1.142254\nTemps de reponse d&amp;#x27;une requete : 1.147621\nTemps de reponse d&amp;#x27;une requete : 8.268267\nTemps de reponse d&amp;#x27;une requete : 1.270556\nTemps de reponse d&amp;#x27;une requete : 1.726218\nTemps de reponse d&amp;#x27;une requete : 1.854039\nTemps de reponse d&amp;#x27;une requete : 0.891931\nTemps de reponse d&amp;#x27;une requete : 1.47688\nTemps de reponse d&amp;#x27;une requete : 1.269069\nTemps de reponse d&amp;#x27;une requete : 1.25595\nTemps de reponse d&amp;#x27;une requete : 0.826842\nTemps de reponse d&amp;#x27;une requete : 1.866157\nTemps de reponse d&amp;#x27;une requete : 1.313413\nTemps de reponse d&amp;#x27;une requete : 0.83263\nTemps de reponse d&amp;#x27;une requete : 0.691178\nTemps de reponse d&amp;#x27;une requete : 0.706204\nTemps de reponse d&amp;#x27;une requete : 0.973889\nTemps de reponse d&amp;#x27;une requete : 1.226531\nTemps de reponse d&amp;#x27;une requete : 0.688497\nTemps de reponse d&amp;#x27;une requete : 7.583082\nTemps de reponse d&amp;#x27;une requete : 2.911805\nTemps de reponse d&amp;#x27;une requete : 1.027081\nTemps de reponse d&amp;#x27;une requete : 8.199262\nTemps de reponse d&amp;#x27;une requete : 6.108135\nTemps de reponse d&amp;#x27;une requete : 1.355791\nTemps de reponse d&amp;#x27;une requete : 0.697481\nTemps de reponse d&amp;#x27;une requete : 0.690693\nTemps de reponse d&amp;#x27;une requete : 8.543461\nTemps de reponse d&amp;#x27;une requete : 7.912901\nTemps de reponse d&amp;#x27;une requete : 2.886259\nTemps de reponse d&amp;#x27;une requete : 2.765794\nTemps de reponse d&amp;#x27;une requete : 7.572071\nTemps de reponse d&amp;#x27;une requete : 7.821959\nTemps de reponse d&amp;#x27;une requete : 1.171363\nTemps de reponse d&amp;#x27;une requete : 8.535992\nTemps de reponse d&amp;#x27;une requete : 6.76938\nTemps de reponse d&amp;#x27;une requete : 0.718467\nTemps de reponse d&amp;#x27;une requete : 8.396552\nTemps de reponse d&amp;#x27;une requete : 8.093145\nTemps de reponse d&amp;#x27;une requete : 7.724236\nTemps de reponse d&amp;#x27;une requete : 2.632538\nTemps de reponse d&amp;#x27;une requete : 8.647718\nTemps de reponse d&amp;#x27;une requete : 8.614898\nTemps de reponse d&amp;#x27;une requete : 7.690852\nTemps de reponse d&amp;#x27;une requete : 8.629794\nTemps de reponse d&amp;#x27;une requete : 8.636456\nTemps de reponse d&amp;#x27;une requete : 7.424101\nTemps de reponse d&amp;#x27;une requete : 7.316409\nTemps de reponse d&amp;#x27;une requete : 8.408107\nTemps de reponse d&amp;#x27;une requete : 8.052741\nTemps de reponse d&amp;#x27;une requete : 7.340183\nTemps de reponse d&amp;#x27;une requete : 7.331227\nTemps de reponse d&amp;#x27;une requete : 7.571096\nTemps de reponse d&amp;#x27;une requete : 7.73529\nTemps de reponse d&amp;#x27;une requete : 8.095579\nTemps de reponse d&amp;#x27;une requete : 8.438855\nTemps de reponse d&amp;#x27;une requete : 7.673313\nTemps de reponse d&amp;#x27;une requete : 7.441983\nTemps de reponse d&amp;#x27;une requete : 7.714298\nTemps de reponse d&amp;#x27;une requete : 7.511192\nTemps de reponse d&amp;#x27;une requete : 8.409925\nTemps de reponse d&amp;#x27;une requete : 8.009884\nTemps de reponse d&amp;#x27;une requete : 6.558776\nTemps de reponse d&amp;#x27;une requete : 7.511886\nTemps de reponse d&amp;#x27;une requete : 8.103261\nTemps de reponse d&amp;#x27;une requete : 7.590608\nTemps de reponse d&amp;#x27;une requete : 6.832372\nTemps de reponse d&amp;#x27;une requete : 7.01976\nTemps de reponse d&amp;#x27;une requete : 7.905186\nTemps de reponse d&amp;#x27;une requete : 8.104858\nTemps de reponse d&amp;#x27;une requete : 6.093912\nTemps de reponse d&amp;#x27;une requete : 8.407238\nTemps de reponse d&amp;#x27;une requete : 7.699982\nTemps de reponse d&amp;#x27;une requete : 7.677016\nTemps de reponse d&amp;#x27;une requete : 7.167085\nTemps de reponse d&amp;#x27;une requete : 7.682001\nTemps de reponse d&amp;#x27;une requete : 6.836061\nTemps de reponse d&amp;#x27;une requete : 7.429879\nTemps de reponse d&amp;#x27;une requete : 6.940014\nTemps de reponse d&amp;#x27;une requete : 8.403812\nTemps de reponse d&amp;#x27;une requete : 7.832617\nTemps de reponse d&amp;#x27;une requete : 7.436302\nTemps de reponse d&amp;#x27;une requete : 7.6877\nTemps de reponse d&amp;#x27;une requete : 7.285095\nTemps de reponse d&amp;#x27;une requete : 7.603127\nTemps de reponse d&amp;#x27;une requete : 6.883109\nTemps de reponse d&amp;#x27;une requete : 8.323427\nTemps de reponse d&amp;#x27;une requete : 8.309995\nTemps de reponse d&amp;#x27;une requete : 6.814926\nTemps de reponse d&amp;#x27;une requete : 7.000296\nTemps de reponse d&amp;#x27;une requete : 7.899937\nTemps de reponse d&amp;#x27;une requete : 6.729274\nTemps de reponse d&amp;#x27;une requete : 7.808711\nTemps de reponse d&amp;#x27;une requete : 6.565632\nTemps de reponse d&amp;#x27;une requete : 7.63065\nTemps de reponse d&amp;#x27;une requete : 7.714612\nTemps de reponse d&amp;#x27;une requete : 6.675\nTemps de reponse d&amp;#x27;une requete : 7.133548\nTemps de reponse d&amp;#x27;une requete : 6.167034\nTemps de reponse d&amp;#x27;une requete : 6.668178\nTemps de reponse d&amp;#x27;une requete : 6.922724\nTemps de reponse d&amp;#x27;une requete : 6.616246\nTemps de reponse d&amp;#x27;une requete : 6.890945\nTemps de reponse d&amp;#x27;une requete : 7.036491\nTemps de reponse d&amp;#x27;une requete : 6.754941\nTemps de reponse d&amp;#x27;une requete : 7.43853\nTemps de reponse d&amp;#x27;une requete : 6.042869\nTemps de reponse d&amp;#x27;une requete : 6.878878\nTemps de reponse d&amp;#x27;une requete : 6.22821\nTemps de reponse d&amp;#x27;une requete : 6.497292\nTemps de reponse d&amp;#x27;une requete : 6.035649\nTemps de reponse d&amp;#x27;une requete : 5.962071\nTemps de reponse d&amp;#x27;une requete : 6.061244\nTemps de reponse d&amp;#x27;une requete : 6.120112\nTemps de reponse d&amp;#x27;une requete : 5.784741\nTemps de reponse d&amp;#x27;une requete : 6.129114\nTemps de reponse d&amp;#x27;une requete : 5.950352\nTemps de reponse d&amp;#x27;une requete : 5.713022\nTemps de reponse d&amp;#x27;une requete : 5.752037\nTemps de reponse d&amp;#x27;une requete : 5.71315\nTemps de reponse d&amp;#x27;une requete : 6.65691\nTemps de reponse d&amp;#x27;une requete : 5.776217\nTemps de reponse d&amp;#x27;une requete : 5.653764\nTemps de reponse d&amp;#x27;une requete : 5.358877\nTemps de reponse d&amp;#x27;une requete : 5.350428\nTemps de reponse d&amp;#x27;une requete : 6.109465\nTemps de reponse d&amp;#x27;une requete : 6.241292\nTemps de reponse d&amp;#x27;une requete : 5.262166\nTemps de reponse d&amp;#x27;une requete : 5.18694\nTemps de reponse d&amp;#x27;une requete : 5.380181\nTemps de reponse d&amp;#x27;une requete : 5.37209\nTemps de reponse d&amp;#x27;une requete : 5.537323\nTemps de reponse d&amp;#x27;une requete : 6.243948\nTemps de reponse d&amp;#x27;une requete : 6.258233\nTemps de reponse d&amp;#x27;une requete : 6.274307\nTemps de reponse d&amp;#x27;une requete : 6.121754\nTemps de reponse d&amp;#x27;une requete : 6.230152\nTemps de reponse d&amp;#x27;une requete : 5.534941\nTemps de reponse d&amp;#x27;une requete : 5.986599\nTemps de reponse d&amp;#x27;une requete : 5.299837\nTemps de reponse d&amp;#x27;une requete : 5.282483\nTemps de reponse d&amp;#x27;une requete : 5.294633\nTemps de reponse d&amp;#x27;une requete : 6.177793\nTemps de reponse d&amp;#x27;une requete : 6.022947\nTemps de reponse d&amp;#x27;une requete : 6.003104\nTemps de reponse d&amp;#x27;une requete : 5.952301\nTemps de reponse d&amp;#x27;une requete : 5.948424\nTemps de reponse d&amp;#x27;une requete : 5.93475\nTemps de reponse d&amp;#x27;une requete : 5.063711\nTemps de reponse d&amp;#x27;une requete : 4.883725\nTemps de reponse d&amp;#x27;une requete : 5.822721\nTemps de reponse d&amp;#x27;une requete : 5.833705\nTemps de reponse d&amp;#x27;une requete : 4.601577\nTemps de reponse d&amp;#x27;une requete : 5.70405\nTemps de reponse d&amp;#x27;une requete : 5.657546\nTemps de reponse d&amp;#x27;une requete : 5.648277\nTemps de reponse d&amp;#x27;une requete : 4.947394\nTemps de reponse d&amp;#x27;une requete : 4.895777\nTemps de reponse d&amp;#x27;une requete : 5.587243\nTemps de reponse d&amp;#x27;une requete : 4.66733\nTemps de reponse d&amp;#x27;une requete : 4.594582\nTemps de reponse d&amp;#x27;une requete : 4.566248\nTemps de reponse d&amp;#x27;une requete : 4.525649\nTemps de reponse d&amp;#x27;une requete : 4.327114\nTemps de reponse d&amp;#x27;une requete : 5.322572\nTemps de reponse d&amp;#x27;une requete : 4.449838\nTemps de reponse d&amp;#x27;une requete : 5.285281\nTemps de reponse d&amp;#x27;une requete : 4.417296\nTemps de reponse d&amp;#x27;une requete : 4.543904\nTemps de reponse d&amp;#x27;une requete : 5.266268\nTemps de reponse d&amp;#x27;une requete : 4.430795\nTemps de reponse d&amp;#x27;une requete : 4.448669\nTemps de reponse d&amp;#x27;une requete : 4.261636\nTemps de reponse d&amp;#x27;une requete : 4.259837\nTemps de reponse d&amp;#x27;une requete : 4.000336\nTemps de reponse d&amp;#x27;une requete : 4.604241\nTemps de reponse d&amp;#x27;une requete : 4.238413\nTemps de reponse d&amp;#x27;une requete : 4.12333\nTemps de reponse d&amp;#x27;une requete : 4.973123\nTemps de reponse d&amp;#x27;une requete : 4.933498\nTemps de reponse d&amp;#x27;une requete : 4.013409\nTemps de reponse d&amp;#x27;une requete : 4.870554\nTemps de reponse d&amp;#x27;une requete : 4.149912\nTemps de reponse d&amp;#x27;une requete : 3.989146\nTemps de reponse d&amp;#x27;une requete : 4.587918\nTemps de reponse d&amp;#x27;une requete : 3.996284\nTemps de reponse d&amp;#x27;une requete : 4.76722\nTemps de reponse d&amp;#x27;une requete : 4.47388\nTemps de reponse d&amp;#x27;une requete : 3.819157\nTemps de reponse d&amp;#x27;une requete : 4.69961\nTemps de reponse d&amp;#x27;une requete : 4.697182\nTemps de reponse d&amp;#x27;une requete : 4.662244\nTemps de reponse d&amp;#x27;une requete : 3.889217\nTemps de reponse d&amp;#x27;une requete : 3.703611\nTemps de reponse d&amp;#x27;une requete : 3.891013\nTemps de reponse d&amp;#x27;une requete : 3.764605\nTemps de reponse d&amp;#x27;une requete : 4.537886\nTemps de reponse d&amp;#x27;une requete : 4.475173\nTemps de reponse d&amp;#x27;une requete : 3.83468\nTemps de reponse d&amp;#x27;une requete : 4.407647\nTemps de reponse d&amp;#x27;une requete : 3.745602\nTemps de reponse d&amp;#x27;une requete : 4.16899\nTemps de reponse d&amp;#x27;une requete : 4.106129\nTemps de reponse d&amp;#x27;une requete : 4.386241\nTemps de reponse d&amp;#x27;une requete : 3.560523\nTemps de reponse d&amp;#x27;une requete : 3.539399\nTemps de reponse d&amp;#x27;une requete : 3.96687\nTemps de reponse d&amp;#x27;une requete : 3.547193\nTemps de reponse d&amp;#x27;une requete : 3.543311\nTemps de reponse d&amp;#x27;une requete : 4.247629\nTemps de reponse d&amp;#x27;une requete : 4.269278\nTemps de reponse d&amp;#x27;une requete : 3.255883\nTemps de reponse d&amp;#x27;une requete : 3.067462\nTemps de reponse d&amp;#x27;une requete : 4.138919\nTemps de reponse d&amp;#x27;une requete : 4.117442\nTemps de reponse d&amp;#x27;une requete : 3.238945\nTemps de reponse d&amp;#x27;une requete : 3.417175\nTemps de reponse d&amp;#x27;une requete : 3.234524\nTemps de reponse d&amp;#x27;une requete : 3.293869\nTemps de reponse d&amp;#x27;une requete : 3.059942\nTemps de reponse d&amp;#x27;une requete : 3.413242\nTemps de reponse d&amp;#x27;une requete : 3.863452\nTemps de reponse d&amp;#x27;une requete : 3.019105\nTemps total d&amp;#x27;ex\u00e9cution : 17.503881692886353\nTemps de r\u00e9ponse moyen : 0.0350077633857727 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 28.565092519061185\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;01-06-2024 17-01-31.html&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
+
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
+
+    get allData() {
+        return { ...this.data }
+    }
+
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
+
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
+
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
+
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
+
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
+
+    get environment() {
+        return this.renderData.environment
+    }
+
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
+
+module.exports = {
+    manager: new DataManager(),
+}
+
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
+
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
+
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
+
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
+
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
+
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
+
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
+
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>

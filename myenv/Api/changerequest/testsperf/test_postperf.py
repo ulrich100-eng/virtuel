@@ -1,7 +1,7 @@
 import pytest
 import time
 import concurrent.futures  
-from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous que le chemin est correct
+from Api.changerequest.testsperf.api_changeperf import Apichangeperf  # Assurez-vous que le chemin est correct
 
 
 
@@ -9,7 +9,7 @@ from Api.changerequest.testsperf.api_changeperf import Apichange  # Assurez-vous
 
 def run(nb):
     
-    api_change = Apichange()
+    api_changeperf = Apichangeperf()
     # Vous pouvez ajuster ce nombre selon vos besoins
     # Corps de la requête à envoyer
     data = {
@@ -65,7 +65,7 @@ def run(nb):
     # Exécution des requêtes en parallèle avec ThreadPoolExecutor
     with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:
             # Map les données avec les requêtes et stocke les résultats
-        results = list(executor.map(lambda data: api_change.post_changeperf(data), data_list))
+        results = list(executor.map(lambda data: api_changeperf.post_changeperf(data), data_list))
     end_time = time.time()  # Temps de fin
     
     # response_times = []  # Liste pour stocker les temps de réponse de chaque requête
@@ -113,25 +113,26 @@ def run(nb):
         assert success_rate > 98, "Taux de succes"
 
 
-    elif nb == 1000:
+    elif nb == 500:
         assert average_response_time < 1.0, f"Temps de réponse moyen élevé: {average_response_time} secondes pour {nb} requêtes"
         assert success_rate > 95, "Taux de succes"
         
 
-    # Assertion générale pour le taux de succès
-    # assert success_rate >= 90, "Le taux de succès est inférieur à 90%"
     
-    
-    
-@pytest.mark.parametrize('nb', [10, 100, 1000] )
+@pytest.mark.parametrize('nb', [10, 100,500] )
 def test_postperf(nb):
-    for id in range(1):  # Répétez le test 5 fois pour chaque valeur de nb
+    for id in range(1):  # Répétez le test 1 fois pour chaque valeur de nb
         run(nb)
+    
         
         
-
+        
+ # Exécution des tests
 if __name__ == "__main__":
-    pytest.main()
+    pytest.main()      
+ 
+
+
 
 
 

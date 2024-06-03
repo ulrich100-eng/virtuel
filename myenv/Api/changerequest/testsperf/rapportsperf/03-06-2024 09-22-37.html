@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title id="head-title">03-06-2024 09-22-37.html</title>
+      <style type="text/css">body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+#environment ul {
+  margin: 0;
+  padding: 0 20px;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+.col-links__extra {
+  margin-right: 3px;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.logwrapper {
+  max-height: 230px;
+  overflow-y: scroll;
+  background-color: #e6e6e6;
+}
+.logwrapper.expanded {
+  max-height: none;
+}
+.logwrapper.expanded .logexpander:after {
+  content: "collapse [-]";
+}
+.logwrapper .logexpander {
+  z-index: 1;
+  position: sticky;
+  top: 10px;
+  width: max-content;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px 7px;
+  margin: 10px 0 10px calc(100% - 80px);
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+.logwrapper .logexpander:after {
+  content: "expand [+]";
+}
+.logwrapper .logexpander:hover {
+  color: #000;
+  border-color: #000;
+}
+.logwrapper .log {
+  min-height: 40px;
+  position: relative;
+  top: -50px;
+  height: calc(100% + 50px);
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  padding: 5px;
+  padding-right: 80px;
+  white-space: pre-wrap;
+}
+
+div.media {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin: 0 5px;
+  overflow: hidden;
+  width: 320px;
+}
+
+.media-container {
+  display: grid;
+  grid-template-columns: 25px auto 25px;
+  align-items: center;
+  flex: 1 1;
+  overflow: hidden;
+  height: 200px;
+}
+
+.media-container--fullscreen {
+  grid-template-columns: 0px auto 0px;
+}
+
+.media-container__nav--right,
+.media-container__nav--left {
+  text-align: center;
+  cursor: pointer;
+}
+
+.media-container__viewport {
+  cursor: pointer;
+  text-align: center;
+  height: inherit;
+}
+.media-container__viewport img,
+.media-container__viewport video {
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+}
+
+.media__name,
+.media__counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 0 0 25px;
+  align-items: center;
+}
+
+.collapsible td:not(.col-links) {
+  cursor: pointer;
+}
+.collapsible td:not(.col-links):hover::after {
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.col-result {
+  width: 130px;
+}
+.col-result:hover::after {
+  content: " (hide details)";
+}
+
+.col-result.collapsed:hover::after {
+  content: " (show details)";
+}
+
+#environment-header h2:hover::after {
+  content: " (hide details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#environment-header.collapsed h2:hover::after {
+  content: " (show details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+.sortable.desc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: -12.5px;
+  border: 10px solid #4caf50;
+  border-bottom: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.sortable.asc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: 12.5px;
+  border: 10px solid #4caf50;
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.hidden, .summary__reload__button.hidden {
+  display: none;
+}
+
+.summary__data {
+  flex: 0 0 550px;
+}
+.summary__reload {
+  flex: 1 1;
+  display: flex;
+  justify-content: center;
+}
+.summary__reload__button {
+  flex: 0 0 300px;
+  display: flex;
+  color: white;
+  font-weight: bold;
+  background-color: #4caf50;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.summary__reload__button:hover {
+  background-color: #46a049;
+}
+.summary__spacer {
+  flex: 0 0 550px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters,
+.collapse {
+  display: flex;
+  align-items: center;
+}
+.filters button,
+.collapse button {
+  color: #999;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.filters button:hover,
+.collapse button:hover {
+  color: #ccc;
+}
+
+.filter__label {
+  margin-right: 10px;
+}
+
+      </style>
+    
+  </head>
+  <body>
+    <h1 id="title">03-06-2024 09-22-37.html</h1>
+    <p>Report generated on 03-Jun-2024 at 09:23:25 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.1.1</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+        </div>
+        <p class="run-count">4 tests took 00:00:47.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
+            <span class="failed">4 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" disabled/>
+            <span class="passed">0 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Expected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" disabled/>
+            <span class="rerun">0 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.11.4&#34;, &#34;Platform&#34;: &#34;Windows-10-10.0.19045-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.2.0&#34;, &#34;pluggy&#34;: &#34;1.5.0&#34;}, &#34;Plugins&#34;: {&#34;allure-pytest&#34;: &#34;2.12.0&#34;, &#34;benchmark&#34;: &#34;4.0.0&#34;, &#34;csv&#34;: &#34;3.0.0&#34;, &#34;excel&#34;: &#34;1.6.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;, &#34;xdist&#34;: &#34;3.5.0&#34;, &#34;xlsx&#34;: &#34;1.0.36.0&#34;}}, &#34;tests&#34;: {&#34;test_putperf.py::test_putperf[10]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putperf.py::test_putperf[10]&#34;, &#34;duration&#34;: &#34;513 ms&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putperf.py::test_putperf[10]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;513 ms&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 10\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ,1000] )\n    def test_putperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           running(nb)\n\ntest_putperf.py:134: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nnb = 10\n\n    def running(nb):\n    \n        api_changeperf = Apichangeperf()\n        # Vous pouvez ajuster ce nombre selon vos besoins\n        # Corps de la requ\u00eate \u00e0 envoyer\n        data = {\n            &amp;quot;name&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;direction&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;department&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;service&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;startDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;priority&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;targetClient&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;sendToART&amp;quot;: True,\n            &amp;quot;origin&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;goal&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reason&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;description&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowDefinitionId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowInstanceId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;status&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reference&amp;quot;: 0,\n            &amp;quot;validators&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;state&amp;quot;: 0,\n            &amp;quot;type&amp;quot;: 0,\n            &amp;quot;createdDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;kpis&amp;quot;: [\n                {\n                    &amp;quot;id&amp;quot;: &amp;quot;3fa85f64-5717-4562-b3fc-2c963f66afa6&amp;quot;,\n                    &amp;quot;label&amp;quot;: &amp;quot;string&amp;quot;,\n                    &amp;quot;frequency&amp;quot;: 0,\n                    &amp;quot;unit&amp;quot;: &amp;quot;string&amp;quot;\n                }\n            ]\n        }\n    \n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)  # V\u00e9rifiez que nb est correctement re\u00e7u\n    \n        data_list = [data for _ in range(nb)]\n    \n        failure_count = 0\n        success_count = 0\n    \n    \n    \n        start_time = time.time()  # Temps de d\u00e9part\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)  # Impression pour d\u00e9bogage\n    \n        # Ex\u00e9cution des requ\u00eates en parall\u00e8le avec ThreadPoolExecutor\n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n                # Map les donn\u00e9es avec les requ\u00eates et stocke les r\u00e9sultats\n            results = list(executor.map(lambda data: api_changeperf.put_changeperf(data), data_list))\n        end_time = time.time()  # Temps de fin\n    \n        # response_times = []  # Liste pour stocker les temps de r\u00e9ponse de chaque requ\u00eate\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;           assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\nE           AssertionError: Taux de succes \nE           assert 0.0 &amp;gt; 98\n\ntest_putperf.py:108: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 10\nRunning test with 10 requests\nTemps de reponse d&amp;#x27;une requete : 0.502106\nTemps de reponse d&amp;#x27;une requete : 0.495815\nTemps de reponse d&amp;#x27;une requete : 0.368067\nTemps de reponse d&amp;#x27;une requete : 0.316469\nTemps de reponse d&amp;#x27;une requete : 0.399582\nTemps de reponse d&amp;#x27;une requete : 0.484346\nTemps de reponse d&amp;#x27;une requete : 0.322981\nTemps de reponse d&amp;#x27;une requete : 0.478461\nTemps de reponse d&amp;#x27;une requete : 0.38727\nTemps de reponse d&amp;#x27;une requete : 0.384092\nTemps total d&amp;#x27;ex\u00e9cution : 0.5091629028320312\nTemps de r\u00e9ponse moyen : 0.050916290283203124 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 19.640079715899727\n&#34;}], &#34;test_putperf.py::test_putperf[100]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putperf.py::test_putperf[100]&#34;, &#34;duration&#34;: &#34;00:00:03&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putperf.py::test_putperf[100]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:03&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 100\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ,1000] )\n    def test_putperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           running(nb)\n\ntest_putperf.py:134: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nnb = 100\n\n    def running(nb):\n    \n        api_changeperf = Apichangeperf()\n        # Vous pouvez ajuster ce nombre selon vos besoins\n        # Corps de la requ\u00eate \u00e0 envoyer\n        data = {\n            &amp;quot;name&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;direction&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;department&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;service&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;startDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;priority&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;targetClient&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;sendToART&amp;quot;: True,\n            &amp;quot;origin&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;goal&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reason&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;description&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowDefinitionId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowInstanceId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;status&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reference&amp;quot;: 0,\n            &amp;quot;validators&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;state&amp;quot;: 0,\n            &amp;quot;type&amp;quot;: 0,\n            &amp;quot;createdDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;kpis&amp;quot;: [\n                {\n                    &amp;quot;id&amp;quot;: &amp;quot;3fa85f64-5717-4562-b3fc-2c963f66afa6&amp;quot;,\n                    &amp;quot;label&amp;quot;: &amp;quot;string&amp;quot;,\n                    &amp;quot;frequency&amp;quot;: 0,\n                    &amp;quot;unit&amp;quot;: &amp;quot;string&amp;quot;\n                }\n            ]\n        }\n    \n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)  # V\u00e9rifiez que nb est correctement re\u00e7u\n    \n        data_list = [data for _ in range(nb)]\n    \n        failure_count = 0\n        success_count = 0\n    \n    \n    \n        start_time = time.time()  # Temps de d\u00e9part\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)  # Impression pour d\u00e9bogage\n    \n        # Ex\u00e9cution des requ\u00eates en parall\u00e8le avec ThreadPoolExecutor\n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n                # Map les donn\u00e9es avec les requ\u00eates et stocke les r\u00e9sultats\n            results = list(executor.map(lambda data: api_changeperf.put_changeperf(data), data_list))\n        end_time = time.time()  # Temps de fin\n    \n        # response_times = []  # Liste pour stocker les temps de r\u00e9ponse de chaque requ\u00eate\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\n    \n        # Assertions pour les requ\u00eates moyennes (nb = 100)\n        elif nb == 100:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;           assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\nE           AssertionError: Taux de succes\nE           assert 0.0 &amp;gt; 98\n\ntest_putperf.py:113: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 100\nRunning test with 100 requests\nTemps de reponse d&amp;#x27;une requete : 0.239681\nTemps de reponse d&amp;#x27;une requete : 0.319708\nTemps de reponse d&amp;#x27;une requete : 0.371776\nTemps de reponse d&amp;#x27;une requete : 0.31403\nTemps de reponse d&amp;#x27;une requete : 0.388778\nTemps de reponse d&amp;#x27;une requete : 0.303811\nTemps de reponse d&amp;#x27;une requete : 0.240927\nTemps de reponse d&amp;#x27;une requete : 0.304677\nTemps de reponse d&amp;#x27;une requete : 0.806861\nTemps de reponse d&amp;#x27;une requete : 0.644459\nTemps de reponse d&amp;#x27;une requete : 0.439189\nTemps de reponse d&amp;#x27;une requete : 0.611879\nTemps de reponse d&amp;#x27;une requete : 0.604021\nTemps de reponse d&amp;#x27;une requete : 0.688703\nTemps de reponse d&amp;#x27;une requete : 0.573838\nTemps de reponse d&amp;#x27;une requete : 0.485395\nTemps de reponse d&amp;#x27;une requete : 0.573425\nTemps de reponse d&amp;#x27;une requete : 0.568079\nTemps de reponse d&amp;#x27;une requete : 0.714719\nTemps de reponse d&amp;#x27;une requete : 0.566756\nTemps de reponse d&amp;#x27;une requete : 0.868747\nTemps de reponse d&amp;#x27;une requete : 0.425786\nTemps de reponse d&amp;#x27;une requete : 0.765418\nTemps de reponse d&amp;#x27;une requete : 0.556622\nTemps de reponse d&amp;#x27;une requete : 0.560191\nTemps de reponse d&amp;#x27;une requete : 0.642857\nTemps de reponse d&amp;#x27;une requete : 0.779242\nTemps de reponse d&amp;#x27;une requete : 0.990794\nTemps de reponse d&amp;#x27;une requete : 0.768138\nTemps de reponse d&amp;#x27;une requete : 0.449967\nTemps de reponse d&amp;#x27;une requete : 0.565218\nTemps de reponse d&amp;#x27;une requete : 0.506277\nTemps de reponse d&amp;#x27;une requete : 0.305723\nTemps de reponse d&amp;#x27;une requete : 0.365722\nTemps de reponse d&amp;#x27;une requete : 0.447281\nTemps de reponse d&amp;#x27;une requete : 0.769792\nTemps de reponse d&amp;#x27;une requete : 0.471724\nTemps de reponse d&amp;#x27;une requete : 0.70677\nTemps de reponse d&amp;#x27;une requete : 0.575096\nTemps de reponse d&amp;#x27;une requete : 0.686451\nTemps de reponse d&amp;#x27;une requete : 0.660503\nTemps de reponse d&amp;#x27;une requete : 0.751994\nTemps de reponse d&amp;#x27;une requete : 0.739497\nTemps de reponse d&amp;#x27;une requete : 0.782731\nTemps de reponse d&amp;#x27;une requete : 0.418226\nTemps de reponse d&amp;#x27;une requete : 0.570548\nTemps de reponse d&amp;#x27;une requete : 0.983443\nTemps de reponse d&amp;#x27;une requete : 0.516017\nTemps de reponse d&amp;#x27;une requete : 0.570471\nTemps de reponse d&amp;#x27;une requete : 0.736546\nTemps de reponse d&amp;#x27;une requete : 0.835484\nTemps de reponse d&amp;#x27;une requete : 0.603996\nTemps de reponse d&amp;#x27;une requete : 0.674891\nTemps de reponse d&amp;#x27;une requete : 0.772636\nTemps de reponse d&amp;#x27;une requete : 0.574165\nTemps de reponse d&amp;#x27;une requete : 0.949707\nTemps de reponse d&amp;#x27;une requete : 0.5722\nTemps de reponse d&amp;#x27;une requete : 0.959934\nTemps de reponse d&amp;#x27;une requete : 0.608036\nTemps de reponse d&amp;#x27;une requete : 0.693043\nTemps de reponse d&amp;#x27;une requete : 1.08651\nTemps de reponse d&amp;#x27;une requete : 0.762924\nTemps de reponse d&amp;#x27;une requete : 0.956915\nTemps de reponse d&amp;#x27;une requete : 0.498339\nTemps de reponse d&amp;#x27;une requete : 0.949721\nTemps de reponse d&amp;#x27;une requete : 0.599487\nTemps de reponse d&amp;#x27;une requete : 0.812919\nTemps de reponse d&amp;#x27;une requete : 0.45051\nTemps de reponse d&amp;#x27;une requete : 0.904623\nTemps de reponse d&amp;#x27;une requete : 0.658533\nTemps de reponse d&amp;#x27;une requete : 0.717999\nTemps de reponse d&amp;#x27;une requete : 0.782716\nTemps de reponse d&amp;#x27;une requete : 0.985305\nTemps de reponse d&amp;#x27;une requete : 0.713315\nTemps de reponse d&amp;#x27;une requete : 0.509756\nTemps de reponse d&amp;#x27;une requete : 0.903396\nTemps de reponse d&amp;#x27;une requete : 0.672599\nTemps de reponse d&amp;#x27;une requete : 0.676135\nTemps de reponse d&amp;#x27;une requete : 0.842204\nTemps de reponse d&amp;#x27;une requete : 0.627314\nTemps de reponse d&amp;#x27;une requete : 0.371775\nTemps de reponse d&amp;#x27;une requete : 0.802034\nTemps de reponse d&amp;#x27;une requete : 0.838277\nTemps de reponse d&amp;#x27;une requete : 0.67104\nTemps de reponse d&amp;#x27;une requete : 0.666354\nTemps de reponse d&amp;#x27;une requete : 0.611782\nTemps de reponse d&amp;#x27;une requete : 0.65386\nTemps de reponse d&amp;#x27;une requete : 0.742982\nTemps de reponse d&amp;#x27;une requete : 0.574456\nTemps de reponse d&amp;#x27;une requete : 0.533176\nTemps de reponse d&amp;#x27;une requete : 0.382755\nTemps de reponse d&amp;#x27;une requete : 0.590219\nTemps de reponse d&amp;#x27;une requete : 0.58274\nTemps de reponse d&amp;#x27;une requete : 0.49733\nTemps de reponse d&amp;#x27;une requete : 0.385954\nTemps de reponse d&amp;#x27;une requete : 0.491041\nTemps de reponse d&amp;#x27;une requete : 0.411149\nTemps de reponse d&amp;#x27;une requete : 0.443019\nTemps de reponse d&amp;#x27;une requete : 0.484253\nTemps de reponse d&amp;#x27;une requete : 0.291013\nTemps total d&amp;#x27;ex\u00e9cution : 3.0219788551330566\nTemps de r\u00e9ponse moyen : 0.030219788551330565 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 33.090899967795124\n&#34;}], &#34;test_putperf.py::test_putperf[500]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putperf.py::test_putperf[500]&#34;, &#34;duration&#34;: &#34;00:00:14&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putperf.py::test_putperf[500]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:14&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 500\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ,1000] )\n    def test_putperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           running(nb)\n\ntest_putperf.py:134: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nnb = 500\n\n    def running(nb):\n    \n        api_changeperf = Apichangeperf()\n        # Vous pouvez ajuster ce nombre selon vos besoins\n        # Corps de la requ\u00eate \u00e0 envoyer\n        data = {\n            &amp;quot;name&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;direction&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;department&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;service&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;startDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;priority&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;targetClient&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;sendToART&amp;quot;: True,\n            &amp;quot;origin&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;goal&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reason&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;description&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowDefinitionId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowInstanceId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;status&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reference&amp;quot;: 0,\n            &amp;quot;validators&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;state&amp;quot;: 0,\n            &amp;quot;type&amp;quot;: 0,\n            &amp;quot;createdDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;kpis&amp;quot;: [\n                {\n                    &amp;quot;id&amp;quot;: &amp;quot;3fa85f64-5717-4562-b3fc-2c963f66afa6&amp;quot;,\n                    &amp;quot;label&amp;quot;: &amp;quot;string&amp;quot;,\n                    &amp;quot;frequency&amp;quot;: 0,\n                    &amp;quot;unit&amp;quot;: &amp;quot;string&amp;quot;\n                }\n            ]\n        }\n    \n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)  # V\u00e9rifiez que nb est correctement re\u00e7u\n    \n        data_list = [data for _ in range(nb)]\n    \n        failure_count = 0\n        success_count = 0\n    \n    \n    \n        start_time = time.time()  # Temps de d\u00e9part\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)  # Impression pour d\u00e9bogage\n    \n        # Ex\u00e9cution des requ\u00eates en parall\u00e8le avec ThreadPoolExecutor\n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n                # Map les donn\u00e9es avec les requ\u00eates et stocke les r\u00e9sultats\n            results = list(executor.map(lambda data: api_changeperf.put_changeperf(data), data_list))\n        end_time = time.time()  # Temps de fin\n    \n        # response_times = []  # Liste pour stocker les temps de r\u00e9ponse de chaque requ\u00eate\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\n    \n        # Assertions pour les requ\u00eates moyennes (nb = 100)\n        elif nb == 100:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\n    \n    \n        elif nb == 500:\n                assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;               assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\nE               AssertionError: Taux de succes\nE               assert 0.0 &amp;gt; 98\n\ntest_putperf.py:118: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 500\nRunning test with 500 requests\nTemps de reponse d&amp;#x27;une requete : 0.182244\nTemps de reponse d&amp;#x27;une requete : 0.156355\nTemps de reponse d&amp;#x27;une requete : 0.235009\nTemps de reponse d&amp;#x27;une requete : 0.266094\nTemps de reponse d&amp;#x27;une requete : 0.232695\nTemps de reponse d&amp;#x27;une requete : 0.305904\nTemps de reponse d&amp;#x27;une requete : 0.297867\nTemps de reponse d&amp;#x27;une requete : 0.237751\nTemps de reponse d&amp;#x27;une requete : 0.141447\nTemps de reponse d&amp;#x27;une requete : 0.642372\nTemps de reponse d&amp;#x27;une requete : 0.36676\nTemps de reponse d&amp;#x27;une requete : 0.338823\nTemps de reponse d&amp;#x27;une requete : 0.421626\nTemps de reponse d&amp;#x27;une requete : 0.468431\nTemps de reponse d&amp;#x27;une requete : 0.398019\nTemps de reponse d&amp;#x27;une requete : 0.678274\nTemps de reponse d&amp;#x27;une requete : 0.636223\nTemps de reponse d&amp;#x27;une requete : 0.550132\nTemps de reponse d&amp;#x27;une requete : 6.003103\nTemps de reponse d&amp;#x27;une requete : 0.56581\nTemps de reponse d&amp;#x27;une requete : 0.288828\nTemps de reponse d&amp;#x27;une requete : 0.736891\nTemps de reponse d&amp;#x27;une requete : 0.476608\nTemps de reponse d&amp;#x27;une requete : 0.505987\nTemps de reponse d&amp;#x27;une requete : 0.564089\nTemps de reponse d&amp;#x27;une requete : 0.590019\nTemps de reponse d&amp;#x27;une requete : 0.40775\nTemps de reponse d&amp;#x27;une requete : 0.311538\nTemps de reponse d&amp;#x27;une requete : 0.402398\nTemps de reponse d&amp;#x27;une requete : 0.435294\nTemps de reponse d&amp;#x27;une requete : 0.710655\nTemps de reponse d&amp;#x27;une requete : 0.402037\nTemps de reponse d&amp;#x27;une requete : 0.494003\nTemps de reponse d&amp;#x27;une requete : 0.544288\nTemps de reponse d&amp;#x27;une requete : 0.589946\nTemps de reponse d&amp;#x27;une requete : 0.589327\nTemps de reponse d&amp;#x27;une requete : 0.430444\nTemps de reponse d&amp;#x27;une requete : 0.608597\nTemps de reponse d&amp;#x27;une requete : 0.727886\nTemps de reponse d&amp;#x27;une requete : 0.825949\nTemps de reponse d&amp;#x27;une requete : 0.601435\nTemps de reponse d&amp;#x27;une requete : 0.512484\nTemps de reponse d&amp;#x27;une requete : 0.526468\nTemps de reponse d&amp;#x27;une requete : 0.524724\nTemps de reponse d&amp;#x27;une requete : 0.734775\nTemps de reponse d&amp;#x27;une requete : 0.661218\nTemps de reponse d&amp;#x27;une requete : 0.639772\nTemps de reponse d&amp;#x27;une requete : 0.668042\nTemps de reponse d&amp;#x27;une requete : 0.866966\nTemps de reponse d&amp;#x27;une requete : 0.405853\nTemps de reponse d&amp;#x27;une requete : 0.768782\nTemps de reponse d&amp;#x27;une requete : 0.726823\nTemps de reponse d&amp;#x27;une requete : 0.865083\nTemps de reponse d&amp;#x27;une requete : 0.576586\nTemps de reponse d&amp;#x27;une requete : 0.703311\nTemps de reponse d&amp;#x27;une requete : 0.60342\nTemps de reponse d&amp;#x27;une requete : 0.779045\nTemps de reponse d&amp;#x27;une requete : 0.61467\nTemps de reponse d&amp;#x27;une requete : 0.636669\nTemps de reponse d&amp;#x27;une requete : 0.61668\nTemps de reponse d&amp;#x27;une requete : 0.473139\nTemps de reponse d&amp;#x27;une requete : 0.46317\nTemps de reponse d&amp;#x27;une requete : 0.708435\nTemps de reponse d&amp;#x27;une requete : 0.593686\nTemps de reponse d&amp;#x27;une requete : 0.5381\nTemps de reponse d&amp;#x27;une requete : 0.492324\nTemps de reponse d&amp;#x27;une requete : 1.023588\nTemps de reponse d&amp;#x27;une requete : 0.533468\nTemps de reponse d&amp;#x27;une requete : 1.249233\nTemps de reponse d&amp;#x27;une requete : 0.737802\nTemps de reponse d&amp;#x27;une requete : 0.669724\nTemps de reponse d&amp;#x27;une requete : 0.650764\nTemps de reponse d&amp;#x27;une requete : 0.653802\nTemps de reponse d&amp;#x27;une requete : 1.083172\nTemps de reponse d&amp;#x27;une requete : 0.538255\nTemps de reponse d&amp;#x27;une requete : 1.146107\nTemps de reponse d&amp;#x27;une requete : 1.206206\nTemps de reponse d&amp;#x27;une requete : 0.668795\nTemps de reponse d&amp;#x27;une requete : 1.112557\nTemps de reponse d&amp;#x27;une requete : 0.643619\nTemps de reponse d&amp;#x27;une requete : 1.084793\nTemps de reponse d&amp;#x27;une requete : 0.746112\nTemps de reponse d&amp;#x27;une requete : 0.809466\nTemps de reponse d&amp;#x27;une requete : 0.668271\nTemps de reponse d&amp;#x27;une requete : 0.735142\nTemps de reponse d&amp;#x27;une requete : 0.638522\nTemps de reponse d&amp;#x27;une requete : 0.959074\nTemps de reponse d&amp;#x27;une requete : 1.067249\nTemps de reponse d&amp;#x27;une requete : 0.64747\nTemps de reponse d&amp;#x27;une requete : 1.243233\nTemps de reponse d&amp;#x27;une requete : 0.737547\nTemps de reponse d&amp;#x27;une requete : 0.842605\nTemps de reponse d&amp;#x27;une requete : 0.611046\nTemps de reponse d&amp;#x27;une requete : 0.511669\nTemps de reponse d&amp;#x27;une requete : 0.471476\nTemps de reponse d&amp;#x27;une requete : 0.862855\nTemps de reponse d&amp;#x27;une requete : 1.203566\nTemps de reponse d&amp;#x27;une requete : 0.510126\nTemps de reponse d&amp;#x27;une requete : 0.998327\nTemps de reponse d&amp;#x27;une requete : 0.529098\nTemps de reponse d&amp;#x27;une requete : 0.682729\nTemps de reponse d&amp;#x27;une requete : 0.812301\nTemps de reponse d&amp;#x27;une requete : 0.646941\nTemps de reponse d&amp;#x27;une requete : 0.697759\nTemps de reponse d&amp;#x27;une requete : 0.844049\nTemps de reponse d&amp;#x27;une requete : 0.742913\nTemps de reponse d&amp;#x27;une requete : 0.712564\nTemps de reponse d&amp;#x27;une requete : 0.6383\nTemps de reponse d&amp;#x27;une requete : 1.108898\nTemps de reponse d&amp;#x27;une requete : 0.595449\nTemps de reponse d&amp;#x27;une requete : 1.188719\nTemps de reponse d&amp;#x27;une requete : 0.707725\nTemps de reponse d&amp;#x27;une requete : 0.681418\nTemps de reponse d&amp;#x27;une requete : 0.784095\nTemps de reponse d&amp;#x27;une requete : 0.651798\nTemps de reponse d&amp;#x27;une requete : 0.63313\nTemps de reponse d&amp;#x27;une requete : 0.543539\nTemps de reponse d&amp;#x27;une requete : 0.850244\nTemps de reponse d&amp;#x27;une requete : 0.637437\nTemps de reponse d&amp;#x27;une requete : 0.776867\nTemps de reponse d&amp;#x27;une requete : 0.783371\nTemps de reponse d&amp;#x27;une requete : 0.479078\nTemps de reponse d&amp;#x27;une requete : 0.734513\nTemps de reponse d&amp;#x27;une requete : 0.727322\nTemps de reponse d&amp;#x27;une requete : 0.861305\nTemps de reponse d&amp;#x27;une requete : 0.837139\nTemps de reponse d&amp;#x27;une requete : 0.807589\nTemps de reponse d&amp;#x27;une requete : 0.48819\nTemps de reponse d&amp;#x27;une requete : 0.670264\nTemps de reponse d&amp;#x27;une requete : 0.576421\nTemps de reponse d&amp;#x27;une requete : 0.644434\nTemps de reponse d&amp;#x27;une requete : 1.47661\nTemps de reponse d&amp;#x27;une requete : 0.82689\nTemps de reponse d&amp;#x27;une requete : 0.477883\nTemps de reponse d&amp;#x27;une requete : 0.917839\nTemps de reponse d&amp;#x27;une requete : 0.947258\nTemps de reponse d&amp;#x27;une requete : 0.645703\nTemps de reponse d&amp;#x27;une requete : 0.702938\nTemps de reponse d&amp;#x27;une requete : 0.859374\nTemps de reponse d&amp;#x27;une requete : 0.320825\nTemps de reponse d&amp;#x27;une requete : 0.887162\nTemps de reponse d&amp;#x27;une requete : 0.699472\nTemps de reponse d&amp;#x27;une requete : 0.878471\nTemps de reponse d&amp;#x27;une requete : 0.421824\nTemps de reponse d&amp;#x27;une requete : 1.325487\nTemps de reponse d&amp;#x27;une requete : 0.815515\nTemps de reponse d&amp;#x27;une requete : 0.609046\nTemps de reponse d&amp;#x27;une requete : 0.675101\nTemps de reponse d&amp;#x27;une requete : 0.686609\nTemps de reponse d&amp;#x27;une requete : 0.802193\nTemps de reponse d&amp;#x27;une requete : 0.7244\nTemps de reponse d&amp;#x27;une requete : 1.110831\nTemps de reponse d&amp;#x27;une requete : 0.608482\nTemps de reponse d&amp;#x27;une requete : 1.019691\nTemps de reponse d&amp;#x27;une requete : 0.465194\nTemps de reponse d&amp;#x27;une requete : 1.17671\nTemps de reponse d&amp;#x27;une requete : 0.789552\nTemps de reponse d&amp;#x27;une requete : 1.351482\nTemps de reponse d&amp;#x27;une requete : 1.013753\nTemps de reponse d&amp;#x27;une requete : 1.017304\nTemps de reponse d&amp;#x27;une requete : 1.042706\nTemps de reponse d&amp;#x27;une requete : 1.055422\nTemps de reponse d&amp;#x27;une requete : 0.790671\nTemps de reponse d&amp;#x27;une requete : 0.619485\nTemps de reponse d&amp;#x27;une requete : 1.22155\nTemps de reponse d&amp;#x27;une requete : 1.117064\nTemps de reponse d&amp;#x27;une requete : 0.681612\nTemps de reponse d&amp;#x27;une requete : 1.03981\nTemps de reponse d&amp;#x27;une requete : 0.948071\nTemps de reponse d&amp;#x27;une requete : 0.87255\nTemps de reponse d&amp;#x27;une requete : 0.768615\nTemps de reponse d&amp;#x27;une requete : 0.6747\nTemps de reponse d&amp;#x27;une requete : 0.851676\nTemps de reponse d&amp;#x27;une requete : 0.826178\nTemps de reponse d&amp;#x27;une requete : 1.011243\nTemps de reponse d&amp;#x27;une requete : 0.914705\nTemps de reponse d&amp;#x27;une requete : 1.704961\nTemps de reponse d&amp;#x27;une requete : 0.990817\nTemps de reponse d&amp;#x27;une requete : 0.891401\nTemps de reponse d&amp;#x27;une requete : 1.092306\nTemps de reponse d&amp;#x27;une requete : 1.264102\nTemps de reponse d&amp;#x27;une requete : 1.215595\nTemps de reponse d&amp;#x27;une requete : 1.038527\nTemps de reponse d&amp;#x27;une requete : 1.120346\nTemps de reponse d&amp;#x27;une requete : 0.82085\nTemps de reponse d&amp;#x27;une requete : 0.903689\nTemps de reponse d&amp;#x27;une requete : 1.049091\nTemps de reponse d&amp;#x27;une requete : 1.876389\nTemps de reponse d&amp;#x27;une requete : 0.747139\nTemps de reponse d&amp;#x27;une requete : 1.342034\nTemps de reponse d&amp;#x27;une requete : 0.760724\nTemps de reponse d&amp;#x27;une requete : 1.718493\nTemps de reponse d&amp;#x27;une requete : 2.136654\nTemps de reponse d&amp;#x27;une requete : 0.771365\nTemps de reponse d&amp;#x27;une requete : 0.621591\nTemps de reponse d&amp;#x27;une requete : 0.501825\nTemps de reponse d&amp;#x27;une requete : 3.240025\nTemps de reponse d&amp;#x27;une requete : 1.085717\nTemps de reponse d&amp;#x27;une requete : 3.935691\nTemps de reponse d&amp;#x27;une requete : 2.616742\nTemps de reponse d&amp;#x27;une requete : 0.899986\nTemps de reponse d&amp;#x27;une requete : 0.374826\nTemps de reponse d&amp;#x27;une requete : 0.631059\nTemps de reponse d&amp;#x27;une requete : 0.752599\nTemps de reponse d&amp;#x27;une requete : 0.68652\nTemps de reponse d&amp;#x27;une requete : 1.864293\nTemps de reponse d&amp;#x27;une requete : 1.037555\nTemps de reponse d&amp;#x27;une requete : 3.03939\nTemps de reponse d&amp;#x27;une requete : 1.007761\nTemps de reponse d&amp;#x27;une requete : 1.027808\nTemps de reponse d&amp;#x27;une requete : 1.170888\nTemps de reponse d&amp;#x27;une requete : 1.102377\nTemps de reponse d&amp;#x27;une requete : 4.148274\nTemps de reponse d&amp;#x27;une requete : 2.979907\nTemps de reponse d&amp;#x27;une requete : 0.617657\nTemps de reponse d&amp;#x27;une requete : 2.976328\nTemps de reponse d&amp;#x27;une requete : 0.773395\nTemps de reponse d&amp;#x27;une requete : 0.788985\nTemps de reponse d&amp;#x27;une requete : 2.400925\nTemps de reponse d&amp;#x27;une requete : 3.886218\nTemps de reponse d&amp;#x27;une requete : 2.385018\nTemps de reponse d&amp;#x27;une requete : 1.246504\nTemps de reponse d&amp;#x27;une requete : 3.789014\nTemps de reponse d&amp;#x27;une requete : 4.384492\nTemps de reponse d&amp;#x27;une requete : 3.4068\nTemps de reponse d&amp;#x27;une requete : 2.297516\nTemps de reponse d&amp;#x27;une requete : 1.935698\nTemps de reponse d&amp;#x27;une requete : 2.105587\nTemps de reponse d&amp;#x27;une requete : 4.03255\nTemps de reponse d&amp;#x27;une requete : 4.143413\nTemps de reponse d&amp;#x27;une requete : 2.630018\nTemps de reponse d&amp;#x27;une requete : 4.32883\nTemps de reponse d&amp;#x27;une requete : 3.449146\nTemps de reponse d&amp;#x27;une requete : 2.749456\nTemps de reponse d&amp;#x27;une requete : 3.694748\nTemps de reponse d&amp;#x27;une requete : 2.474359\nTemps de reponse d&amp;#x27;une requete : 3.860865\nTemps de reponse d&amp;#x27;une requete : 2.216944\nTemps de reponse d&amp;#x27;une requete : 3.136019\nTemps de reponse d&amp;#x27;une requete : 3.576212\nTemps de reponse d&amp;#x27;une requete : 2.288095\nTemps de reponse d&amp;#x27;une requete : 2.030436\nTemps de reponse d&amp;#x27;une requete : 2.114846\nTemps de reponse d&amp;#x27;une requete : 4.625238\nTemps de reponse d&amp;#x27;une requete : 2.283556\nTemps de reponse d&amp;#x27;une requete : 2.066673\nTemps de reponse d&amp;#x27;une requete : 1.782516\nTemps de reponse d&amp;#x27;une requete : 3.314014\nTemps de reponse d&amp;#x27;une requete : 2.62304\nTemps de reponse d&amp;#x27;une requete : 2.644026\nTemps de reponse d&amp;#x27;une requete : 3.50311\nTemps de reponse d&amp;#x27;une requete : 3.218474\nTemps de reponse d&amp;#x27;une requete : 3.189664\nTemps de reponse d&amp;#x27;une requete : 1.982944\nTemps de reponse d&amp;#x27;une requete : 3.006009\nTemps de reponse d&amp;#x27;une requete : 3.118809\nTemps de reponse d&amp;#x27;une requete : 3.239966\nTemps de reponse d&amp;#x27;une requete : 3.786313\nTemps de reponse d&amp;#x27;une requete : 1.521634\nTemps de reponse d&amp;#x27;une requete : 1.532745\nTemps de reponse d&amp;#x27;une requete : 2.150383\nTemps de reponse d&amp;#x27;une requete : 2.446702\nTemps de reponse d&amp;#x27;une requete : 2.460004\nTemps de reponse d&amp;#x27;une requete : 2.357648\nTemps de reponse d&amp;#x27;une requete : 2.752735\nTemps de reponse d&amp;#x27;une requete : 2.005798\nTemps de reponse d&amp;#x27;une requete : 1.525618\nTemps de reponse d&amp;#x27;une requete : 1.938942\nTemps de reponse d&amp;#x27;une requete : 1.366579\nTemps de reponse d&amp;#x27;une requete : 2.379759\nTemps de reponse d&amp;#x27;une requete : 4.039384\nTemps de reponse d&amp;#x27;une requete : 2.082342\nTemps de reponse d&amp;#x27;une requete : 2.262872\nTemps de reponse d&amp;#x27;une requete : 1.81541\nTemps de reponse d&amp;#x27;une requete : 1.117325\nTemps de reponse d&amp;#x27;une requete : 2.598878\nTemps de reponse d&amp;#x27;une requete : 1.156992\nTemps de reponse d&amp;#x27;une requete : 2.338512\nTemps de reponse d&amp;#x27;une requete : 0.94131\nTemps de reponse d&amp;#x27;une requete : 1.026204\nTemps de reponse d&amp;#x27;une requete : 1.854699\nTemps de reponse d&amp;#x27;une requete : 1.658427\nTemps de reponse d&amp;#x27;une requete : 2.046015\nTemps de reponse d&amp;#x27;une requete : 2.059697\nTemps de reponse d&amp;#x27;une requete : 2.229348\nTemps de reponse d&amp;#x27;une requete : 2.047785\nTemps de reponse d&amp;#x27;une requete : 1.741778\nTemps de reponse d&amp;#x27;une requete : 1.214087\nTemps de reponse d&amp;#x27;une requete : 0.642764\nTemps de reponse d&amp;#x27;une requete : 2.037248\nTemps de reponse d&amp;#x27;une requete : 1.997992\nTemps de reponse d&amp;#x27;une requete : 1.476118\nTemps de reponse d&amp;#x27;une requete : 1.443068\nTemps de reponse d&amp;#x27;une requete : 1.680298\nTemps de reponse d&amp;#x27;une requete : 3.069418\nTemps de reponse d&amp;#x27;une requete : 1.168848\nTemps de reponse d&amp;#x27;une requete : 2.295726\nTemps de reponse d&amp;#x27;une requete : 2.491317\nTemps de reponse d&amp;#x27;une requete : 1.474876\nTemps de reponse d&amp;#x27;une requete : 1.174095\nTemps de reponse d&amp;#x27;une requete : 1.159744\nTemps de reponse d&amp;#x27;une requete : 0.814134\nTemps de reponse d&amp;#x27;une requete : 1.397617\nTemps de reponse d&amp;#x27;une requete : 1.632191\nTemps de reponse d&amp;#x27;une requete : 3.041936\nTemps de reponse d&amp;#x27;une requete : 1.465425\nTemps de reponse d&amp;#x27;une requete : 1.931227\nTemps de reponse d&amp;#x27;une requete : 1.769467\nTemps de reponse d&amp;#x27;une requete : 0.939202\nTemps de reponse d&amp;#x27;une requete : 1.338902\nTemps de reponse d&amp;#x27;une requete : 0.982397\nTemps de reponse d&amp;#x27;une requete : 1.036429\nTemps de reponse d&amp;#x27;une requete : 0.951806\nTemps de reponse d&amp;#x27;une requete : 1.327878\nTemps de reponse d&amp;#x27;une requete : 1.495353\nTemps de reponse d&amp;#x27;une requete : 0.9749\nTemps de reponse d&amp;#x27;une requete : 1.062801\nTemps de reponse d&amp;#x27;une requete : 1.060752\nTemps de reponse d&amp;#x27;une requete : 0.918561\nTemps de reponse d&amp;#x27;une requete : 2.552637\nTemps de reponse d&amp;#x27;une requete : 1.810374\nTemps de reponse d&amp;#x27;une requete : 1.236606\nTemps de reponse d&amp;#x27;une requete : 1.40345\nTemps de reponse d&amp;#x27;une requete : 1.476525\nTemps de reponse d&amp;#x27;une requete : 1.040298\nTemps de reponse d&amp;#x27;une requete : 1.70203\nTemps de reponse d&amp;#x27;une requete : 0.854653\nTemps de reponse d&amp;#x27;une requete : 1.502444\nTemps de reponse d&amp;#x27;une requete : 0.742351\nTemps de reponse d&amp;#x27;une requete : 2.223261\nTemps de reponse d&amp;#x27;une requete : 0.836272\nTemps de reponse d&amp;#x27;une requete : 1.971918\nTemps de reponse d&amp;#x27;une requete : 2.475407\nTemps de reponse d&amp;#x27;une requete : 1.419188\nTemps de reponse d&amp;#x27;une requete : 1.869856\nTemps de reponse d&amp;#x27;une requete : 1.024336\nTemps de reponse d&amp;#x27;une requete : 1.135062\nTemps de reponse d&amp;#x27;une requete : 1.045157\nTemps de reponse d&amp;#x27;une requete : 1.331213\nTemps de reponse d&amp;#x27;une requete : 1.235466\nTemps de reponse d&amp;#x27;une requete : 1.028374\nTemps de reponse d&amp;#x27;une requete : 1.817106\nTemps de reponse d&amp;#x27;une requete : 1.953594\nTemps de reponse d&amp;#x27;une requete : 2.55665\nTemps de reponse d&amp;#x27;une requete : 1.606213\nTemps de reponse d&amp;#x27;une requete : 0.697052\nTemps de reponse d&amp;#x27;une requete : 1.027021\nTemps de reponse d&amp;#x27;une requete : 1.640919\nTemps de reponse d&amp;#x27;une requete : 1.338182\nTemps de reponse d&amp;#x27;une requete : 1.618178\nTemps de reponse d&amp;#x27;une requete : 0.812045\nTemps de reponse d&amp;#x27;une requete : 1.730566\nTemps de reponse d&amp;#x27;une requete : 1.525438\nTemps de reponse d&amp;#x27;une requete : 2.523614\nTemps de reponse d&amp;#x27;une requete : 1.810725\nTemps de reponse d&amp;#x27;une requete : 2.121606\nTemps de reponse d&amp;#x27;une requete : 0.94386\nTemps de reponse d&amp;#x27;une requete : 1.06636\nTemps de reponse d&amp;#x27;une requete : 1.331119\nTemps de reponse d&amp;#x27;une requete : 2.477196\nTemps de reponse d&amp;#x27;une requete : 0.81038\nTemps de reponse d&amp;#x27;une requete : 3.962157\nTemps de reponse d&amp;#x27;une requete : 1.675499\nTemps de reponse d&amp;#x27;une requete : 2.078433\nTemps de reponse d&amp;#x27;une requete : 0.906382\nTemps de reponse d&amp;#x27;une requete : 2.15537\nTemps de reponse d&amp;#x27;une requete : 1.435764\nTemps de reponse d&amp;#x27;une requete : 0.58101\nTemps de reponse d&amp;#x27;une requete : 2.677716\nTemps de reponse d&amp;#x27;une requete : 1.100923\nTemps de reponse d&amp;#x27;une requete : 1.902255\nTemps de reponse d&amp;#x27;une requete : 0.889075\nTemps de reponse d&amp;#x27;une requete : 2.849111\nTemps de reponse d&amp;#x27;une requete : 2.531363\nTemps de reponse d&amp;#x27;une requete : 1.855554\nTemps de reponse d&amp;#x27;une requete : 1.740746\nTemps de reponse d&amp;#x27;une requete : 1.809047\nTemps de reponse d&amp;#x27;une requete : 2.023228\nTemps de reponse d&amp;#x27;une requete : 1.390519\nTemps de reponse d&amp;#x27;une requete : 1.490826\nTemps de reponse d&amp;#x27;une requete : 1.287663\nTemps de reponse d&amp;#x27;une requete : 1.005981\nTemps de reponse d&amp;#x27;une requete : 2.435887\nTemps de reponse d&amp;#x27;une requete : 1.19121\nTemps de reponse d&amp;#x27;une requete : 3.484075\nTemps de reponse d&amp;#x27;une requete : 3.279109\nTemps de reponse d&amp;#x27;une requete : 1.124012\nTemps de reponse d&amp;#x27;une requete : 1.846236\nTemps de reponse d&amp;#x27;une requete : 1.102662\nTemps de reponse d&amp;#x27;une requete : 1.178533\nTemps de reponse d&amp;#x27;une requete : 1.482588\nTemps de reponse d&amp;#x27;une requete : 3.788716\nTemps de reponse d&amp;#x27;une requete : 1.520336\nTemps de reponse d&amp;#x27;une requete : 2.627256\nTemps de reponse d&amp;#x27;une requete : 1.171326\nTemps de reponse d&amp;#x27;une requete : 1.687065\nTemps de reponse d&amp;#x27;une requete : 0.839296\nTemps de reponse d&amp;#x27;une requete : 1.958804\nTemps de reponse d&amp;#x27;une requete : 2.145466\nTemps de reponse d&amp;#x27;une requete : 1.720686\nTemps de reponse d&amp;#x27;une requete : 2.572757\nTemps de reponse d&amp;#x27;une requete : 1.447544\nTemps de reponse d&amp;#x27;une requete : 1.353548\nTemps de reponse d&amp;#x27;une requete : 1.502731\nTemps de reponse d&amp;#x27;une requete : 1.969335\nTemps de reponse d&amp;#x27;une requete : 2.26866\nTemps de reponse d&amp;#x27;une requete : 1.861233\nTemps de reponse d&amp;#x27;une requete : 2.925923\nTemps de reponse d&amp;#x27;une requete : 2.50702\nTemps de reponse d&amp;#x27;une requete : 1.50997\nTemps de reponse d&amp;#x27;une requete : 3.346916\nTemps de reponse d&amp;#x27;une requete : 1.224699\nTemps de reponse d&amp;#x27;une requete : 1.623637\nTemps de reponse d&amp;#x27;une requete : 2.450176\nTemps de reponse d&amp;#x27;une requete : 2.464584\nTemps de reponse d&amp;#x27;une requete : 1.427835\nTemps de reponse d&amp;#x27;une requete : 3.240481\nTemps de reponse d&amp;#x27;une requete : 0.995864\nTemps de reponse d&amp;#x27;une requete : 1.095769\nTemps de reponse d&amp;#x27;une requete : 1.559264\nTemps de reponse d&amp;#x27;une requete : 2.376568\nTemps de reponse d&amp;#x27;une requete : 2.513975\nTemps de reponse d&amp;#x27;une requete : 1.118537\nTemps de reponse d&amp;#x27;une requete : 2.413739\nTemps de reponse d&amp;#x27;une requete : 3.241085\nTemps de reponse d&amp;#x27;une requete : 2.601376\nTemps de reponse d&amp;#x27;une requete : 2.530766\nTemps de reponse d&amp;#x27;une requete : 2.713106\nTemps de reponse d&amp;#x27;une requete : 1.239585\nTemps de reponse d&amp;#x27;une requete : 1.097225\nTemps de reponse d&amp;#x27;une requete : 2.580719\nTemps de reponse d&amp;#x27;une requete : 0.815478\nTemps de reponse d&amp;#x27;une requete : 2.516987\nTemps de reponse d&amp;#x27;une requete : 2.230387\nTemps de reponse d&amp;#x27;une requete : 2.28502\nTemps de reponse d&amp;#x27;une requete : 2.46114\nTemps de reponse d&amp;#x27;une requete : 2.778986\nTemps de reponse d&amp;#x27;une requete : 2.817441\nTemps de reponse d&amp;#x27;une requete : 1.791293\nTemps de reponse d&amp;#x27;une requete : 1.992904\nTemps de reponse d&amp;#x27;une requete : 2.231222\nTemps de reponse d&amp;#x27;une requete : 1.784463\nTemps de reponse d&amp;#x27;une requete : 0.898218\nTemps de reponse d&amp;#x27;une requete : 1.617396\nTemps de reponse d&amp;#x27;une requete : 2.037163\nTemps de reponse d&amp;#x27;une requete : 2.557867\nTemps de reponse d&amp;#x27;une requete : 2.340722\nTemps de reponse d&amp;#x27;une requete : 1.290842\nTemps de reponse d&amp;#x27;une requete : 1.718787\nTemps de reponse d&amp;#x27;une requete : 1.693432\nTemps de reponse d&amp;#x27;une requete : 1.394952\nTemps de reponse d&amp;#x27;une requete : 2.108953\nTemps de reponse d&amp;#x27;une requete : 1.939702\nTemps de reponse d&amp;#x27;une requete : 1.90908\nTemps de reponse d&amp;#x27;une requete : 2.380351\nTemps de reponse d&amp;#x27;une requete : 1.514125\nTemps de reponse d&amp;#x27;une requete : 1.866061\nTemps de reponse d&amp;#x27;une requete : 2.052301\nTemps de reponse d&amp;#x27;une requete : 1.931311\nTemps de reponse d&amp;#x27;une requete : 2.087934\nTemps de reponse d&amp;#x27;une requete : 1.742234\nTemps de reponse d&amp;#x27;une requete : 1.799142\nTemps de reponse d&amp;#x27;une requete : 1.605284\nTemps de reponse d&amp;#x27;une requete : 1.545084\nTemps de reponse d&amp;#x27;une requete : 1.996584\nTemps de reponse d&amp;#x27;une requete : 1.394165\nTemps de reponse d&amp;#x27;une requete : 1.744725\nTemps de reponse d&amp;#x27;une requete : 1.944558\nTemps de reponse d&amp;#x27;une requete : 1.457456\nTemps de reponse d&amp;#x27;une requete : 2.101548\nTemps de reponse d&amp;#x27;une requete : 1.891502\nTemps de reponse d&amp;#x27;une requete : 1.487307\nTemps de reponse d&amp;#x27;une requete : 1.762846\nTemps de reponse d&amp;#x27;une requete : 1.615671\nTemps de reponse d&amp;#x27;une requete : 1.409705\nTemps de reponse d&amp;#x27;une requete : 1.895094\nTemps de reponse d&amp;#x27;une requete : 1.707384\nTemps de reponse d&amp;#x27;une requete : 1.737538\nTemps de reponse d&amp;#x27;une requete : 1.115441\nTemps de reponse d&amp;#x27;une requete : 0.9397\nTemps de reponse d&amp;#x27;une requete : 1.367553\nTemps de reponse d&amp;#x27;une requete : 1.49533\nTemps de reponse d&amp;#x27;une requete : 1.00714\nTemps de reponse d&amp;#x27;une requete : 1.665744\nTemps de reponse d&amp;#x27;une requete : 1.188815\nTemps de reponse d&amp;#x27;une requete : 0.656432\nTemps de reponse d&amp;#x27;une requete : 1.3212\nTemps de reponse d&amp;#x27;une requete : 0.420072\nTemps de reponse d&amp;#x27;une requete : 0.671821\nTemps de reponse d&amp;#x27;une requete : 0.669406\nTemps de reponse d&amp;#x27;une requete : 0.918238\nTemps de reponse d&amp;#x27;une requete : 1.050225\nTemps de reponse d&amp;#x27;une requete : 0.807542\nTemps de reponse d&amp;#x27;une requete : 1.086459\nTemps de reponse d&amp;#x27;une requete : 0.77099\nTemps de reponse d&amp;#x27;une requete : 0.590371\nTemps de reponse d&amp;#x27;une requete : 0.701552\nTemps de reponse d&amp;#x27;une requete : 0.611923\nTemps de reponse d&amp;#x27;une requete : 0.638417\nTemps de reponse d&amp;#x27;une requete : 0.45444\nTemps total d&amp;#x27;ex\u00e9cution : 14.07662558555603\nTemps de r\u00e9ponse moyen : 0.02815325117111206 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 35.51987633407313\n&#34;}], &#34;test_putperf.py::test_putperf[1000]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;test_putperf.py::test_putperf[1000]&#34;, &#34;duration&#34;: &#34;00:00:29&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;test_putperf.py::test_putperf[1000]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:29&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;nb = 1000\n\n    @pytest.mark.parametrize(&amp;#x27;nb&amp;#x27;, [10, 100, 500 ,1000] )\n    def test_putperf(nb):\n        for id in range(1):  # R\u00e9p\u00e9tez le test 1 foi pour chaque valeur de nb\n&amp;gt;           running(nb)\n\ntest_putperf.py:134: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nnb = 1000\n\n    def running(nb):\n    \n        api_changeperf = Apichangeperf()\n        # Vous pouvez ajuster ce nombre selon vos besoins\n        # Corps de la requ\u00eate \u00e0 envoyer\n        data = {\n            &amp;quot;name&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;holderEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorCuid&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorName&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;initiatorEmail&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;direction&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;department&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;service&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;startDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;priority&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;targetClient&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;sendToART&amp;quot;: True,\n            &amp;quot;origin&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;goal&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reason&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;description&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowDefinitionId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;workflowInstanceId&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;status&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;reference&amp;quot;: 0,\n            &amp;quot;validators&amp;quot;: &amp;quot;string&amp;quot;,\n            &amp;quot;state&amp;quot;: 0,\n            &amp;quot;type&amp;quot;: 0,\n            &amp;quot;createdDate&amp;quot;: &amp;quot;2024-05-11T15:12:21.426Z&amp;quot;,\n            &amp;quot;kpis&amp;quot;: [\n                {\n                    &amp;quot;id&amp;quot;: &amp;quot;3fa85f64-5717-4562-b3fc-2c963f66afa6&amp;quot;,\n                    &amp;quot;label&amp;quot;: &amp;quot;string&amp;quot;,\n                    &amp;quot;frequency&amp;quot;: 0,\n                    &amp;quot;unit&amp;quot;: &amp;quot;string&amp;quot;\n                }\n            ]\n        }\n    \n    \n        print(f&amp;quot;Received nb: {nb}&amp;quot;)  # V\u00e9rifiez que nb est correctement re\u00e7u\n    \n        data_list = [data for _ in range(nb)]\n    \n        failure_count = 0\n        success_count = 0\n    \n    \n    \n        start_time = time.time()  # Temps de d\u00e9part\n        print(f&amp;quot;Running test with {nb} requests&amp;quot;)  # Impression pour d\u00e9bogage\n    \n        # Ex\u00e9cution des requ\u00eates en parall\u00e8le avec ThreadPoolExecutor\n        with concurrent.futures.ThreadPoolExecutor(max_workers=nb) as executor:\n                # Map les donn\u00e9es avec les requ\u00eates et stocke les r\u00e9sultats\n            results = list(executor.map(lambda data: api_changeperf.put_changeperf(data), data_list))\n        end_time = time.time()  # Temps de fin\n    \n        # response_times = []  # Liste pour stocker les temps de r\u00e9ponse de chaque requ\u00eate\n    \n        for result in results:\n                response_time = result.elapsed.total_seconds()\n                print(&amp;quot;Temps de reponse d&amp;#x27;une requete :&amp;quot;, response_time)# Temps de r\u00e9ponse en secondes\n                # response_times.append(response_time)\n    \n                if result.status_code == 201:\n                    success_count += 1\n                else:\n                    failure_count += 1\n    \n        total_time = end_time - start_time  # Temps total d&amp;#x27;ex\u00e9cution\n        print(&amp;quot;Temps total d&amp;#x27;ex\u00e9cution :&amp;quot;, total_time)\n    \n        average_response_time = total_time / nb\n        print(f&amp;quot;Temps de r\u00e9ponse moyen : {average_response_time} secondes&amp;quot;)\n    \n    \n              # Calcul du taux de succ\u00e8s et d&amp;#x27;\u00e9chec\n    \n        success_rate = (success_count / nb) * 100\n    \n        print(f&amp;quot;Taux de succ\u00e8s : {success_rate}%&amp;quot;)\n    \n    \n        failure_rate = (failure_count / nb) * 100\n        print(f&amp;quot;Taux d&amp;#x27;\u00e9chec : {failure_rate}%&amp;quot;)\n    \n        # Calcul du d\u00e9bit (requ\u00eates par seconde)\n        throughput = nb / total_time\n        print(f&amp;quot;Le debit : {throughput}&amp;quot;)\n    \n    \n        # Assertions pour les requ\u00eates l\u00e9g\u00e8res (nb = 10)\n        if nb == 10:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes &amp;quot;\n    \n        # Assertions pour les requ\u00eates moyennes (nb = 100)\n        elif nb == 100:\n            assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n            assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\n    \n    \n        elif nb == 500:\n                assert average_response_time &amp;lt; 0.5, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n                assert success_rate &amp;gt; 98, &amp;quot;Taux de succes&amp;quot;\n    \n    \n        elif nb == 1000:\n            assert average_response_time &amp;lt; 1.0, f&amp;quot;Temps de r\u00e9ponse moyen \u00e9lev\u00e9: {average_response_time} secondes pour {nb} requ\u00eates&amp;quot;\n&amp;gt;           assert success_rate &amp;gt; 95, &amp;quot;Taux de succes&amp;quot;\nE           AssertionError: Taux de succes\nE           assert 0.0 &amp;gt; 95\n\ntest_putperf.py:123: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReceived nb: 1000\nRunning test with 1000 requests\nTemps de reponse d&amp;#x27;une requete : 0.503766\nTemps de reponse d&amp;#x27;une requete : 0.634179\nTemps de reponse d&amp;#x27;une requete : 0.849899\nTemps de reponse d&amp;#x27;une requete : 0.319135\nTemps de reponse d&amp;#x27;une requete : 0.447859\nTemps de reponse d&amp;#x27;une requete : 0.685981\nTemps de reponse d&amp;#x27;une requete : 0.845682\nTemps de reponse d&amp;#x27;une requete : 0.929226\nTemps de reponse d&amp;#x27;une requete : 0.867481\nTemps de reponse d&amp;#x27;une requete : 0.791394\nTemps de reponse d&amp;#x27;une requete : 0.928364\nTemps de reponse d&amp;#x27;une requete : 0.738891\nTemps de reponse d&amp;#x27;une requete : 0.859841\nTemps de reponse d&amp;#x27;une requete : 1.02913\nTemps de reponse d&amp;#x27;une requete : 0.604002\nTemps de reponse d&amp;#x27;une requete : 1.025453\nTemps de reponse d&amp;#x27;une requete : 1.075085\nTemps de reponse d&amp;#x27;une requete : 1.024301\nTemps de reponse d&amp;#x27;une requete : 0.595523\nTemps de reponse d&amp;#x27;une requete : 0.617334\nTemps de reponse d&amp;#x27;une requete : 0.909093\nTemps de reponse d&amp;#x27;une requete : 0.942155\nTemps de reponse d&amp;#x27;une requete : 0.570328\nTemps de reponse d&amp;#x27;une requete : 1.549378\nTemps de reponse d&amp;#x27;une requete : 0.746345\nTemps de reponse d&amp;#x27;une requete : 5.21403\nTemps de reponse d&amp;#x27;une requete : 3.668451\nTemps de reponse d&amp;#x27;une requete : 8.107984\nTemps de reponse d&amp;#x27;une requete : 4.277528\nTemps de reponse d&amp;#x27;une requete : 11.849405\nTemps de reponse d&amp;#x27;une requete : 15.938361\nTemps de reponse d&amp;#x27;une requete : 20.852001\nTemps de reponse d&amp;#x27;une requete : 15.959939\nTemps de reponse d&amp;#x27;une requete : 11.414816\nTemps de reponse d&amp;#x27;une requete : 0.680243\nTemps de reponse d&amp;#x27;une requete : 13.038008\nTemps de reponse d&amp;#x27;une requete : 17.642462\nTemps de reponse d&amp;#x27;une requete : 12.929007\nTemps de reponse d&amp;#x27;une requete : 0.517613\nTemps de reponse d&amp;#x27;une requete : 3.414846\nTemps de reponse d&amp;#x27;une requete : 17.547047\nTemps de reponse d&amp;#x27;une requete : 17.786991\nTemps de reponse d&amp;#x27;une requete : 15.432907\nTemps de reponse d&amp;#x27;une requete : 14.815331\nTemps de reponse d&amp;#x27;une requete : 15.431957\nTemps de reponse d&amp;#x27;une requete : 23.729524\nTemps de reponse d&amp;#x27;une requete : 26.969429\nTemps de reponse d&amp;#x27;une requete : 15.828039\nTemps de reponse d&amp;#x27;une requete : 24.094305\nTemps de reponse d&amp;#x27;une requete : 26.9771\nTemps de reponse d&amp;#x27;une requete : 17.593373\nTemps de reponse d&amp;#x27;une requete : 26.972308\nTemps de reponse d&amp;#x27;une requete : 23.611557\nTemps de reponse d&amp;#x27;une requete : 3.541585\nTemps de reponse d&amp;#x27;une requete : 16.002084\nTemps de reponse d&amp;#x27;une requete : 12.911996\nTemps de reponse d&amp;#x27;une requete : 9.956768\nTemps de reponse d&amp;#x27;une requete : 27.183995\nTemps de reponse d&amp;#x27;une requete : 0.580917\nTemps de reponse d&amp;#x27;une requete : 25.76296\nTemps de reponse d&amp;#x27;une requete : 23.21088\nTemps de reponse d&amp;#x27;une requete : 24.833634\nTemps de reponse d&amp;#x27;une requete : 23.256625\nTemps de reponse d&amp;#x27;une requete : 25.522793\nTemps de reponse d&amp;#x27;une requete : 15.66244\nTemps de reponse d&amp;#x27;une requete : 23.458871\nTemps de reponse d&amp;#x27;une requete : 23.501739\nTemps de reponse d&amp;#x27;une requete : 13.129093\nTemps de reponse d&amp;#x27;une requete : 26.802462\nTemps de reponse d&amp;#x27;une requete : 15.439789\nTemps de reponse d&amp;#x27;une requete : 26.776618\nTemps de reponse d&amp;#x27;une requete : 23.118389\nTemps de reponse d&amp;#x27;une requete : 26.67077\nTemps de reponse d&amp;#x27;une requete : 16.842371\nTemps de reponse d&amp;#x27;une requete : 24.731476\nTemps de reponse d&amp;#x27;une requete : 26.214873\nTemps de reponse d&amp;#x27;une requete : 17.016865\nTemps de reponse d&amp;#x27;une requete : 15.256617\nTemps de reponse d&amp;#x27;une requete : 26.535931\nTemps de reponse d&amp;#x27;une requete : 26.484704\nTemps de reponse d&amp;#x27;une requete : 16.619253\nTemps de reponse d&amp;#x27;une requete : 26.402324\nTemps de reponse d&amp;#x27;une requete : 12.785319\nTemps de reponse d&amp;#x27;une requete : 16.524202\nTemps de reponse d&amp;#x27;une requete : 22.689144\nTemps de reponse d&amp;#x27;une requete : 26.353575\nTemps de reponse d&amp;#x27;une requete : 26.277946\nTemps de reponse d&amp;#x27;une requete : 22.595569\nTemps de reponse d&amp;#x27;une requete : 26.229951\nTemps de reponse d&amp;#x27;une requete : 12.55771\nTemps de reponse d&amp;#x27;une requete : 12.523848\nTemps de reponse d&amp;#x27;une requete : 16.08588\nTemps de reponse d&amp;#x27;une requete : 16.152521\nTemps de reponse d&amp;#x27;une requete : 12.442839\nTemps de reponse d&amp;#x27;une requete : 24.125142\nTemps de reponse d&amp;#x27;une requete : 16.107378\nTemps de reponse d&amp;#x27;une requete : 12.340694\nTemps de reponse d&amp;#x27;une requete : 22.632503\nTemps de reponse d&amp;#x27;une requete : 24.043707\nTemps de reponse d&amp;#x27;une requete : 22.196545\nTemps de reponse d&amp;#x27;une requete : 12.147629\nTemps de reponse d&amp;#x27;une requete : 18.478238\nTemps de reponse d&amp;#x27;une requete : 15.928391\nTemps de reponse d&amp;#x27;une requete : 16.739251\nTemps de reponse d&amp;#x27;une requete : 22.514858\nTemps de reponse d&amp;#x27;une requete : 16.583863\nTemps de reponse d&amp;#x27;une requete : 25.69074\nTemps de reponse d&amp;#x27;une requete : 23.34364\nTemps de reponse d&amp;#x27;une requete : 23.368135\nTemps de reponse d&amp;#x27;une requete : 25.661709\nTemps de reponse d&amp;#x27;une requete : 15.328113\nTemps de reponse d&amp;#x27;une requete : 15.421874\nTemps de reponse d&amp;#x27;une requete : 15.289347\nTemps de reponse d&amp;#x27;une requete : 15.972806\nTemps de reponse d&amp;#x27;une requete : 15.791515\nTemps de reponse d&amp;#x27;une requete : 25.480808\nTemps de reponse d&amp;#x27;une requete : 25.42469\nTemps de reponse d&amp;#x27;une requete : 25.402772\nTemps de reponse d&amp;#x27;une requete : 23.079655\nTemps de reponse d&amp;#x27;une requete : 15.762247\nTemps de reponse d&amp;#x27;une requete : 23.003589\nTemps de reponse d&amp;#x27;une requete : 25.298013\nTemps de reponse d&amp;#x27;une requete : 15.342\nTemps de reponse d&amp;#x27;une requete : 21.645501\nTemps de reponse d&amp;#x27;une requete : 25.261238\nTemps de reponse d&amp;#x27;une requete : 25.212291\nTemps de reponse d&amp;#x27;une requete : 13.868466\nTemps de reponse d&amp;#x27;une requete : 13.902187\nTemps de reponse d&amp;#x27;une requete : 13.824063\nTemps de reponse d&amp;#x27;une requete : 13.871596\nTemps de reponse d&amp;#x27;une requete : 13.74923\nTemps de reponse d&amp;#x27;une requete : 24.692246\nTemps de reponse d&amp;#x27;une requete : 24.681877\nTemps de reponse d&amp;#x27;une requete : 13.657394\nTemps de reponse d&amp;#x27;une requete : 13.733617\nTemps de reponse d&amp;#x27;une requete : 16.272071\nTemps de reponse d&amp;#x27;une requete : 16.145516\nTemps de reponse d&amp;#x27;une requete : 21.288429\nTemps de reponse d&amp;#x27;une requete : 15.847232\nTemps de reponse d&amp;#x27;une requete : 16.2024\nTemps de reponse d&amp;#x27;une requete : 15.68974\nTemps de reponse d&amp;#x27;une requete : 21.12194\nTemps de reponse d&amp;#x27;une requete : 16.105483\nTemps de reponse d&amp;#x27;une requete : 16.218008\nTemps de reponse d&amp;#x27;une requete : 24.371533\nTemps de reponse d&amp;#x27;une requete : 16.094964\nTemps de reponse d&amp;#x27;une requete : 24.834662\nTemps de reponse d&amp;#x27;une requete : 24.37519\nTemps de reponse d&amp;#x27;une requete : 24.817369\nTemps de reponse d&amp;#x27;une requete : 22.716495\nTemps de reponse d&amp;#x27;une requete : 24.673966\nTemps de reponse d&amp;#x27;une requete : 22.673707\nTemps de reponse d&amp;#x27;une requete : 15.863577\nTemps de reponse d&amp;#x27;une requete : 17.001964\nTemps de reponse d&amp;#x27;une requete : 24.541149\nTemps de reponse d&amp;#x27;une requete : 17.081567\nTemps de reponse d&amp;#x27;une requete : 24.262551\nTemps de reponse d&amp;#x27;une requete : 24.235643\nTemps de reponse d&amp;#x27;une requete : 24.036294\nTemps de reponse d&amp;#x27;une requete : 24.50869\nTemps de reponse d&amp;#x27;une requete : 24.47229\nTemps de reponse d&amp;#x27;une requete : 24.020583\nTemps de reponse d&amp;#x27;une requete : 14.553539\nTemps de reponse d&amp;#x27;une requete : 22.334369\nTemps de reponse d&amp;#x27;une requete : 24.205235\nTemps de reponse d&amp;#x27;une requete : 15.550235\nTemps de reponse d&amp;#x27;une requete : 15.172602\nTemps de reponse d&amp;#x27;une requete : 14.98837\nTemps de reponse d&amp;#x27;une requete : 14.271358\nTemps de reponse d&amp;#x27;une requete : 14.532979\nTemps de reponse d&amp;#x27;une requete : 23.862395\nTemps de reponse d&amp;#x27;une requete : 23.769294\nTemps de reponse d&amp;#x27;une requete : 23.724841\nTemps de reponse d&amp;#x27;une requete : 23.587905\nTemps de reponse d&amp;#x27;une requete : 20.293068\nTemps de reponse d&amp;#x27;une requete : 15.140016\nTemps de reponse d&amp;#x27;une requete : 20.198104\nTemps de reponse d&amp;#x27;une requete : 16.465401\nTemps de reponse d&amp;#x27;une requete : 14.171819\nTemps de reponse d&amp;#x27;une requete : 23.460959\nTemps de reponse d&amp;#x27;une requete : 12.498934\nTemps de reponse d&amp;#x27;une requete : 16.305189\nTemps de reponse d&amp;#x27;une requete : 17.748436\nTemps de reponse d&amp;#x27;une requete : 20.048877\nTemps de reponse d&amp;#x27;une requete : 16.232986\nTemps de reponse d&amp;#x27;une requete : 23.133062\nTemps de reponse d&amp;#x27;une requete : 12.276003\nTemps de reponse d&amp;#x27;une requete : 20.027209\nTemps de reponse d&amp;#x27;une requete : 23.380344\nTemps de reponse d&amp;#x27;une requete : 23.330205\nTemps de reponse d&amp;#x27;une requete : 23.205951\nTemps de reponse d&amp;#x27;une requete : 20.214338\nTemps de reponse d&amp;#x27;une requete : 20.414294\nTemps de reponse d&amp;#x27;une requete : 23.603972\nTemps de reponse d&amp;#x27;une requete : 23.475071\nTemps de reponse d&amp;#x27;une requete : 23.484306\nTemps de reponse d&amp;#x27;une requete : 23.461793\nTemps de reponse d&amp;#x27;une requete : 23.444777\nTemps de reponse d&amp;#x27;une requete : 23.423885\nTemps de reponse d&amp;#x27;une requete : 23.408441\nTemps de reponse d&amp;#x27;une requete : 23.407117\nTemps de reponse d&amp;#x27;une requete : 23.400804\nTemps de reponse d&amp;#x27;une requete : 23.430377\nTemps de reponse d&amp;#x27;une requete : 23.320809\nTemps de reponse d&amp;#x27;une requete : 23.279113\nTemps de reponse d&amp;#x27;une requete : 23.240312\nTemps de reponse d&amp;#x27;une requete : 23.159443\nTemps de reponse d&amp;#x27;une requete : 22.850419\nTemps de reponse d&amp;#x27;une requete : 23.139787\nTemps de reponse d&amp;#x27;une requete : 22.862942\nTemps de reponse d&amp;#x27;une requete : 16.579165\nTemps de reponse d&amp;#x27;une requete : 16.535332\nTemps de reponse d&amp;#x27;une requete : 16.463539\nTemps de reponse d&amp;#x27;une requete : 22.71273\nTemps de reponse d&amp;#x27;une requete : 19.650076\nTemps de reponse d&amp;#x27;une requete : 22.621468\nTemps de reponse d&amp;#x27;une requete : 14.10948\nTemps de reponse d&amp;#x27;une requete : 22.651027\nTemps de reponse d&amp;#x27;une requete : 22.679478\nTemps de reponse d&amp;#x27;une requete : 22.665895\nTemps de reponse d&amp;#x27;une requete : 19.540216\nTemps de reponse d&amp;#x27;une requete : 14.086024\nTemps de reponse d&amp;#x27;une requete : 22.654788\nTemps de reponse d&amp;#x27;une requete : 22.592762\nTemps de reponse d&amp;#x27;une requete : 20.522202\nTemps de reponse d&amp;#x27;une requete : 15.202029\nTemps de reponse d&amp;#x27;une requete : 22.908762\nTemps de reponse d&amp;#x27;une requete : 11.266406\nTemps de reponse d&amp;#x27;une requete : 11.313806\nTemps de reponse d&amp;#x27;une requete : 15.153567\nTemps de reponse d&amp;#x27;une requete : 21.221001\nTemps de reponse d&amp;#x27;une requete : 11.152597\nTemps de reponse d&amp;#x27;une requete : 11.162387\nTemps de reponse d&amp;#x27;une requete : 22.518504\nTemps de reponse d&amp;#x27;une requete : 18.494272\nTemps de reponse d&amp;#x27;une requete : 22.482104\nTemps de reponse d&amp;#x27;une requete : 20.474503\nTemps de reponse d&amp;#x27;une requete : 11.016799\nTemps de reponse d&amp;#x27;une requete : 18.37538\nTemps de reponse d&amp;#x27;une requete : 21.985501\nTemps de reponse d&amp;#x27;une requete : 10.871461\nTemps de reponse d&amp;#x27;une requete : 21.982643\nTemps de reponse d&amp;#x27;une requete : 20.293633\nTemps de reponse d&amp;#x27;une requete : 10.978828\nTemps de reponse d&amp;#x27;une requete : 10.954097\nTemps de reponse d&amp;#x27;une requete : 20.288081\nTemps de reponse d&amp;#x27;une requete : 22.305282\nTemps de reponse d&amp;#x27;une requete : 18.294176\nTemps de reponse d&amp;#x27;une requete : 20.278943\nTemps de reponse d&amp;#x27;une requete : 21.20956\nTemps de reponse d&amp;#x27;une requete : 15.637135\nTemps de reponse d&amp;#x27;une requete : 21.957568\nTemps de reponse d&amp;#x27;une requete : 22.289042\nTemps de reponse d&amp;#x27;une requete : 10.668248\nTemps de reponse d&amp;#x27;une requete : 21.636141\nTemps de reponse d&amp;#x27;une requete : 10.637305\nTemps de reponse d&amp;#x27;une requete : 21.93766\nTemps de reponse d&amp;#x27;une requete : 17.885533\nTemps de reponse d&amp;#x27;une requete : 17.844929\nTemps de reponse d&amp;#x27;une requete : 17.840055\nTemps de reponse d&amp;#x27;une requete : 19.809091\nTemps de reponse d&amp;#x27;une requete : 10.413574\nTemps de reponse d&amp;#x27;une requete : 21.794497\nTemps de reponse d&amp;#x27;une requete : 15.262016\nTemps de reponse d&amp;#x27;une requete : 11.832874\nTemps de reponse d&amp;#x27;une requete : 21.449449\nTemps de reponse d&amp;#x27;une requete : 21.480381\nTemps de reponse d&amp;#x27;une requete : 19.757427\nTemps de reponse d&amp;#x27;une requete : 17.557862\nTemps de reponse d&amp;#x27;une requete : 10.42421\nTemps de reponse d&amp;#x27;une requete : 21.780408\nTemps de reponse d&amp;#x27;une requete : 17.547297\nTemps de reponse d&amp;#x27;une requete : 18.053734\nTemps de reponse d&amp;#x27;une requete : 15.461667\nTemps de reponse d&amp;#x27;une requete : 19.73564\nTemps de reponse d&amp;#x27;une requete : 11.902129\nTemps de reponse d&amp;#x27;une requete : 21.748272\nTemps de reponse d&amp;#x27;une requete : 21.751192\nTemps de reponse d&amp;#x27;une requete : 15.125744\nTemps de reponse d&amp;#x27;une requete : 15.828788\nTemps de reponse d&amp;#x27;une requete : 19.710207\nTemps de reponse d&amp;#x27;une requete : 20.91848\nTemps de reponse d&amp;#x27;une requete : 17.510873\nTemps de reponse d&amp;#x27;une requete : 19.192939\nTemps de reponse d&amp;#x27;une requete : 16.962924\nTemps de reponse d&amp;#x27;une requete : 16.912027\nTemps de reponse d&amp;#x27;une requete : 19.110952\nTemps de reponse d&amp;#x27;une requete : 20.810618\nTemps de reponse d&amp;#x27;une requete : 9.664073\nTemps de reponse d&amp;#x27;une requete : 19.959929\nTemps de reponse d&amp;#x27;une requete : 19.961841\nTemps de reponse d&amp;#x27;une requete : 9.623749\nTemps de reponse d&amp;#x27;une requete : 19.953984\nTemps de reponse d&amp;#x27;une requete : 19.040766\nTemps de reponse d&amp;#x27;une requete : 10.974956\nTemps de reponse d&amp;#x27;une requete : 18.900813\nTemps de reponse d&amp;#x27;une requete : 10.640589\nTemps de reponse d&amp;#x27;une requete : 10.699994\nTemps de reponse d&amp;#x27;une requete : 10.686937\nTemps de reponse d&amp;#x27;une requete : 10.617565\nTemps de reponse d&amp;#x27;une requete : 10.674489\nTemps de reponse d&amp;#x27;une requete : 10.537704\nTemps de reponse d&amp;#x27;une requete : 10.624934\nTemps de reponse d&amp;#x27;une requete : 10.477632\nTemps de reponse d&amp;#x27;une requete : 10.433697\nTemps de reponse d&amp;#x27;une requete : 18.647264\nTemps de reponse d&amp;#x27;une requete : 10.431213\nTemps de reponse d&amp;#x27;une requete : 10.781508\nTemps de reponse d&amp;#x27;une requete : 10.476769\nTemps de reponse d&amp;#x27;une requete : 10.68997\nTemps de reponse d&amp;#x27;une requete : 10.426937\nTemps de reponse d&amp;#x27;une requete : 10.724764\nTemps de reponse d&amp;#x27;une requete : 10.417343\nTemps de reponse d&amp;#x27;une requete : 10.471201\nTemps de reponse d&amp;#x27;une requete : 10.379013\nTemps de reponse d&amp;#x27;une requete : 10.890612\nTemps de reponse d&amp;#x27;une requete : 20.331192\nTemps de reponse d&amp;#x27;une requete : 10.372815\nTemps de reponse d&amp;#x27;une requete : 10.092334\nTemps de reponse d&amp;#x27;une requete : 10.388006\nTemps de reponse d&amp;#x27;une requete : 10.656182\nTemps de reponse d&amp;#x27;une requete : 10.39898\nTemps de reponse d&amp;#x27;une requete : 19.147404\nTemps de reponse d&amp;#x27;une requete : 10.385487\nTemps de reponse d&amp;#x27;une requete : 10.00728\nTemps de reponse d&amp;#x27;une requete : 9.910106\nTemps de reponse d&amp;#x27;une requete : 11.259593\nTemps de reponse d&amp;#x27;une requete : 10.041724\nTemps de reponse d&amp;#x27;une requete : 8.752854\nTemps de reponse d&amp;#x27;une requete : 8.755918\nTemps de reponse d&amp;#x27;une requete : 10.141971\nTemps de reponse d&amp;#x27;une requete : 9.896824\nTemps de reponse d&amp;#x27;une requete : 16.525519\nTemps de reponse d&amp;#x27;une requete : 9.701034\nTemps de reponse d&amp;#x27;une requete : 17.92325\nTemps de reponse d&amp;#x27;une requete : 9.842561\nTemps de reponse d&amp;#x27;une requete : 16.524516\nTemps de reponse d&amp;#x27;une requete : 19.64903\nTemps de reponse d&amp;#x27;une requete : 9.991072\nTemps de reponse d&amp;#x27;une requete : 11.18076\nTemps de reponse d&amp;#x27;une requete : 19.651074\nTemps de reponse d&amp;#x27;une requete : 19.440863\nTemps de reponse d&amp;#x27;une requete : 19.470522\nTemps de reponse d&amp;#x27;une requete : 17.73521\nTemps de reponse d&amp;#x27;une requete : 19.451532\nTemps de reponse d&amp;#x27;une requete : 19.671868\nTemps de reponse d&amp;#x27;une requete : 19.445036\nTemps de reponse d&amp;#x27;une requete : 19.448473\nTemps de reponse d&amp;#x27;une requete : 10.84934\nTemps de reponse d&amp;#x27;une requete : 19.667749\nTemps de reponse d&amp;#x27;une requete : 17.721802\nTemps de reponse d&amp;#x27;une requete : 9.862123\nTemps de reponse d&amp;#x27;une requete : 19.424757\nTemps de reponse d&amp;#x27;une requete : 8.575082\nTemps de reponse d&amp;#x27;une requete : 19.51832\nTemps de reponse d&amp;#x27;une requete : 8.058537\nTemps de reponse d&amp;#x27;une requete : 8.452826\nTemps de reponse d&amp;#x27;une requete : 8.013262\nTemps de reponse d&amp;#x27;une requete : 8.003494\nTemps de reponse d&amp;#x27;une requete : 15.574598\nTemps de reponse d&amp;#x27;une requete : 15.342662\nTemps de reponse d&amp;#x27;une requete : 12.701703\nTemps de reponse d&amp;#x27;une requete : 18.824275\nTemps de reponse d&amp;#x27;une requete : 18.818548\nTemps de reponse d&amp;#x27;une requete : 12.666976\nTemps de reponse d&amp;#x27;une requete : 18.796835\nTemps de reponse d&amp;#x27;une requete : 15.539183\nTemps de reponse d&amp;#x27;une requete : 18.794026\nTemps de reponse d&amp;#x27;une requete : 18.980138\nTemps de reponse d&amp;#x27;une requete : 12.589629\nTemps de reponse d&amp;#x27;une requete : 18.78103\nTemps de reponse d&amp;#x27;une requete : 18.781401\nTemps de reponse d&amp;#x27;une requete : 18.78958\nTemps de reponse d&amp;#x27;une requete : 12.582641\nTemps de reponse d&amp;#x27;une requete : 12.591018\nTemps de reponse d&amp;#x27;une requete : 18.779992\nTemps de reponse d&amp;#x27;une requete : 18.967926\nTemps de reponse d&amp;#x27;une requete : 18.77112\nTemps de reponse d&amp;#x27;une requete : 18.799516\nTemps de reponse d&amp;#x27;une requete : 18.767724\nTemps de reponse d&amp;#x27;une requete : 12.581328\nTemps de reponse d&amp;#x27;une requete : 12.57034\nTemps de reponse d&amp;#x27;une requete : 18.768691\nTemps de reponse d&amp;#x27;une requete : 12.539857\nTemps de reponse d&amp;#x27;une requete : 18.765648\nTemps de reponse d&amp;#x27;une requete : 18.770511\nTemps de reponse d&amp;#x27;une requete : 12.602205\nTemps de reponse d&amp;#x27;une requete : 15.720099\nTemps de reponse d&amp;#x27;une requete : 18.755241\nTemps de reponse d&amp;#x27;une requete : 12.595618\nTemps de reponse d&amp;#x27;une requete : 18.144421\nTemps de reponse d&amp;#x27;une requete : 18.140271\nTemps de reponse d&amp;#x27;une requete : 18.027217\nTemps de reponse d&amp;#x27;une requete : 18.135511\nTemps de reponse d&amp;#x27;une requete : 11.835776\nTemps de reponse d&amp;#x27;une requete : 17.967501\nTemps de reponse d&amp;#x27;une requete : 17.895337\nTemps de reponse d&amp;#x27;une requete : 17.803185\nTemps de reponse d&amp;#x27;une requete : 17.800503\nTemps de reponse d&amp;#x27;une requete : 6.93274\nTemps de reponse d&amp;#x27;une requete : 18.01207\nTemps de reponse d&amp;#x27;une requete : 14.189453\nTemps de reponse d&amp;#x27;une requete : 6.919997\nTemps de reponse d&amp;#x27;une requete : 9.533636\nTemps de reponse d&amp;#x27;une requete : 9.357539\nTemps de reponse d&amp;#x27;une requete : 17.742344\nTemps de reponse d&amp;#x27;une requete : 9.214844\nTemps de reponse d&amp;#x27;une requete : 9.322918\nTemps de reponse d&amp;#x27;une requete : 18.279647\nTemps de reponse d&amp;#x27;une requete : 15.622342\nTemps de reponse d&amp;#x27;une requete : 9.173437\nTemps de reponse d&amp;#x27;une requete : 11.870623\nTemps de reponse d&amp;#x27;une requete : 17.591513\nTemps de reponse d&amp;#x27;une requete : 8.005764\nTemps de reponse d&amp;#x27;une requete : 18.066043\nTemps de reponse d&amp;#x27;une requete : 17.382399\nTemps de reponse d&amp;#x27;une requete : 14.137691\nTemps de reponse d&amp;#x27;une requete : 8.05361\nTemps de reponse d&amp;#x27;une requete : 16.776946\nTemps de reponse d&amp;#x27;une requete : 8.047986\nTemps de reponse d&amp;#x27;une requete : 7.930217\nTemps de reponse d&amp;#x27;une requete : 7.984996\nTemps de reponse d&amp;#x27;une requete : 7.996661\nTemps de reponse d&amp;#x27;une requete : 17.581978\nTemps de reponse d&amp;#x27;une requete : 11.440401\nTemps de reponse d&amp;#x27;une requete : 17.555118\nTemps de reponse d&amp;#x27;une requete : 17.386411\nTemps de reponse d&amp;#x27;une requete : 8.035848\nTemps de reponse d&amp;#x27;une requete : 18.047732\nTemps de reponse d&amp;#x27;une requete : 16.760153\nTemps de reponse d&amp;#x27;une requete : 17.520655\nTemps de reponse d&amp;#x27;une requete : 7.965096\nTemps de reponse d&amp;#x27;une requete : 17.569847\nTemps de reponse d&amp;#x27;une requete : 8.739612\nTemps de reponse d&amp;#x27;une requete : 11.528185\nTemps de reponse d&amp;#x27;une requete : 18.188238\nTemps de reponse d&amp;#x27;une requete : 17.545143\nTemps de reponse d&amp;#x27;une requete : 17.538661\nTemps de reponse d&amp;#x27;une requete : 17.622946\nTemps de reponse d&amp;#x27;une requete : 17.594886\nTemps de reponse d&amp;#x27;une requete : 17.514347\nTemps de reponse d&amp;#x27;une requete : 17.343619\nTemps de reponse d&amp;#x27;une requete : 17.260952\nTemps de reponse d&amp;#x27;une requete : 17.36363\nTemps de reponse d&amp;#x27;une requete : 17.400127\nTemps de reponse d&amp;#x27;une requete : 17.285503\nTemps de reponse d&amp;#x27;une requete : 17.104488\nTemps de reponse d&amp;#x27;une requete : 17.15612\nTemps de reponse d&amp;#x27;une requete : 17.085736\nTemps de reponse d&amp;#x27;une requete : 17.043711\nTemps de reponse d&amp;#x27;une requete : 15.35021\nTemps de reponse d&amp;#x27;une requete : 15.32433\nTemps de reponse d&amp;#x27;une requete : 15.32281\nTemps de reponse d&amp;#x27;une requete : 15.322699\nTemps de reponse d&amp;#x27;une requete : 15.250448\nTemps de reponse d&amp;#x27;une requete : 15.25096\nTemps de reponse d&amp;#x27;une requete : 17.043931\nTemps de reponse d&amp;#x27;une requete : 17.126697\nTemps de reponse d&amp;#x27;une requete : 16.848818\nTemps de reponse d&amp;#x27;une requete : 16.352193\nTemps de reponse d&amp;#x27;une requete : 6.753858\nTemps de reponse d&amp;#x27;une requete : 6.693368\nTemps de reponse d&amp;#x27;une requete : 6.862499\nTemps de reponse d&amp;#x27;une requete : 10.46238\nTemps de reponse d&amp;#x27;une requete : 10.221847\nTemps de reponse d&amp;#x27;une requete : 16.782782\nTemps de reponse d&amp;#x27;une requete : 16.210316\nTemps de reponse d&amp;#x27;une requete : 6.925693\nTemps de reponse d&amp;#x27;une requete : 6.447077\nTemps de reponse d&amp;#x27;une requete : 6.444578\nTemps de reponse d&amp;#x27;une requete : 6.464921\nTemps de reponse d&amp;#x27;une requete : 6.392143\nTemps de reponse d&amp;#x27;une requete : 6.50154\nTemps de reponse d&amp;#x27;une requete : 6.357812\nTemps de reponse d&amp;#x27;une requete : 6.287388\nTemps de reponse d&amp;#x27;une requete : 6.414637\nTemps de reponse d&amp;#x27;une requete : 7.050453\nTemps de reponse d&amp;#x27;une requete : 6.334029\nTemps de reponse d&amp;#x27;une requete : 6.332067\nTemps de reponse d&amp;#x27;une requete : 10.422522\nTemps de reponse d&amp;#x27;une requete : 9.805523\nTemps de reponse d&amp;#x27;une requete : 6.945452\nTemps de reponse d&amp;#x27;une requete : 6.203602\nTemps de reponse d&amp;#x27;une requete : 6.260221\nTemps de reponse d&amp;#x27;une requete : 6.207349\nTemps de reponse d&amp;#x27;une requete : 15.72952\nTemps de reponse d&amp;#x27;une requete : 6.561674\nTemps de reponse d&amp;#x27;une requete : 6.165968\nTemps de reponse d&amp;#x27;une requete : 6.17184\nTemps de reponse d&amp;#x27;une requete : 6.193175\nTemps de reponse d&amp;#x27;une requete : 6.371832\nTemps de reponse d&amp;#x27;une requete : 6.671977\nTemps de reponse d&amp;#x27;une requete : 6.040109\nTemps de reponse d&amp;#x27;une requete : 6.687574\nTemps de reponse d&amp;#x27;une requete : 6.34287\nTemps de reponse d&amp;#x27;une requete : 6.041993\nTemps de reponse d&amp;#x27;une requete : 5.856991\nTemps de reponse d&amp;#x27;une requete : 9.715379\nTemps de reponse d&amp;#x27;une requete : 5.726999\nTemps de reponse d&amp;#x27;une requete : 15.830743\nTemps de reponse d&amp;#x27;une requete : 15.79394\nTemps de reponse d&amp;#x27;une requete : 15.756526\nTemps de reponse d&amp;#x27;une requete : 15.927133\nTemps de reponse d&amp;#x27;une requete : 15.735731\nTemps de reponse d&amp;#x27;une requete : 15.85311\nTemps de reponse d&amp;#x27;une requete : 15.847788\nTemps de reponse d&amp;#x27;une requete : 15.847751\nTemps de reponse d&amp;#x27;une requete : 15.170166\nTemps de reponse d&amp;#x27;une requete : 15.111437\nTemps de reponse d&amp;#x27;une requete : 15.073155\nTemps de reponse d&amp;#x27;une requete : 15.456813\nTemps de reponse d&amp;#x27;une requete : 15.581469\nTemps de reponse d&amp;#x27;une requete : 15.430876\nTemps de reponse d&amp;#x27;une requete : 15.690815\nTemps de reponse d&amp;#x27;une requete : 13.781935\nTemps de reponse d&amp;#x27;une requete : 13.775243\nTemps de reponse d&amp;#x27;une requete : 15.542192\nTemps de reponse d&amp;#x27;une requete : 15.539066\nTemps de reponse d&amp;#x27;une requete : 13.649792\nTemps de reponse d&amp;#x27;une requete : 13.656685\nTemps de reponse d&amp;#x27;une requete : 15.550264\nTemps de reponse d&amp;#x27;une requete : 13.643693\nTemps de reponse d&amp;#x27;une requete : 13.629216\nTemps de reponse d&amp;#x27;une requete : 13.5197\nTemps de reponse d&amp;#x27;une requete : 15.262007\nTemps de reponse d&amp;#x27;une requete : 13.468979\nTemps de reponse d&amp;#x27;une requete : 14.890713\nTemps de reponse d&amp;#x27;une requete : 15.261932\nTemps de reponse d&amp;#x27;une requete : 14.888323\nTemps de reponse d&amp;#x27;une requete : 15.268186\nTemps de reponse d&amp;#x27;une requete : 15.340606\nTemps de reponse d&amp;#x27;une requete : 14.461653\nTemps de reponse d&amp;#x27;une requete : 14.903562\nTemps de reponse d&amp;#x27;une requete : 14.87967\nTemps de reponse d&amp;#x27;une requete : 14.770307\nTemps de reponse d&amp;#x27;une requete : 14.770275\nTemps de reponse d&amp;#x27;une requete : 14.545917\nTemps de reponse d&amp;#x27;une requete : 14.643613\nTemps de reponse d&amp;#x27;une requete : 14.624077\nTemps de reponse d&amp;#x27;une requete : 5.849396\nTemps de reponse d&amp;#x27;une requete : 3.509397\nTemps de reponse d&amp;#x27;une requete : 14.536051\nTemps de reponse d&amp;#x27;une requete : 14.572625\nTemps de reponse d&amp;#x27;une requete : 14.564554\nTemps de reponse d&amp;#x27;une requete : 3.493463\nTemps de reponse d&amp;#x27;une requete : 3.486596\nTemps de reponse d&amp;#x27;une requete : 3.487733\nTemps de reponse d&amp;#x27;une requete : 14.163823\nTemps de reponse d&amp;#x27;une requete : 3.353422\nTemps de reponse d&amp;#x27;une requete : 3.365199\nTemps de reponse d&amp;#x27;une requete : 3.397536\nTemps de reponse d&amp;#x27;une requete : 3.478847\nTemps de reponse d&amp;#x27;une requete : 5.770065\nTemps de reponse d&amp;#x27;une requete : 14.159247\nTemps de reponse d&amp;#x27;une requete : 14.015203\nTemps de reponse d&amp;#x27;une requete : 13.778841\nTemps de reponse d&amp;#x27;une requete : 13.871862\nTemps de reponse d&amp;#x27;une requete : 13.831844\nTemps de reponse d&amp;#x27;une requete : 13.818612\nTemps de reponse d&amp;#x27;une requete : 13.729335\nTemps de reponse d&amp;#x27;une requete : 13.676842\nTemps de reponse d&amp;#x27;une requete : 13.630737\nTemps de reponse d&amp;#x27;une requete : 13.655228\nTemps de reponse d&amp;#x27;une requete : 13.695361\nTemps de reponse d&amp;#x27;une requete : 13.586758\nTemps de reponse d&amp;#x27;une requete : 13.644105\nTemps de reponse d&amp;#x27;une requete : 13.631215\nTemps de reponse d&amp;#x27;une requete : 13.644529\nTemps de reponse d&amp;#x27;une requete : 13.649671\nTemps de reponse d&amp;#x27;une requete : 13.636064\nTemps de reponse d&amp;#x27;une requete : 13.671059\nTemps de reponse d&amp;#x27;une requete : 13.634524\nTemps de reponse d&amp;#x27;une requete : 13.629039\nTemps de reponse d&amp;#x27;une requete : 13.668328\nTemps de reponse d&amp;#x27;une requete : 13.561847\nTemps de reponse d&amp;#x27;une requete : 13.485744\nTemps de reponse d&amp;#x27;une requete : 13.437972\nTemps de reponse d&amp;#x27;une requete : 13.440927\nTemps de reponse d&amp;#x27;une requete : 13.248472\nTemps de reponse d&amp;#x27;une requete : 13.436763\nTemps de reponse d&amp;#x27;une requete : 13.496144\nTemps de reponse d&amp;#x27;une requete : 13.43342\nTemps de reponse d&amp;#x27;une requete : 13.48225\nTemps de reponse d&amp;#x27;une requete : 13.554667\nTemps de reponse d&amp;#x27;une requete : 13.427534\nTemps de reponse d&amp;#x27;une requete : 13.438783\nTemps de reponse d&amp;#x27;une requete : 13.540153\nTemps de reponse d&amp;#x27;une requete : 13.432185\nTemps de reponse d&amp;#x27;une requete : 14.113559\nTemps de reponse d&amp;#x27;une requete : 13.426988\nTemps de reponse d&amp;#x27;une requete : 13.41904\nTemps de reponse d&amp;#x27;une requete : 13.443138\nTemps de reponse d&amp;#x27;une requete : 13.630412\nTemps de reponse d&amp;#x27;une requete : 13.382676\nTemps de reponse d&amp;#x27;une requete : 13.610415\nTemps de reponse d&amp;#x27;une requete : 13.421218\nTemps de reponse d&amp;#x27;une requete : 13.418749\nTemps de reponse d&amp;#x27;une requete : 13.610285\nTemps de reponse d&amp;#x27;une requete : 13.404792\nTemps de reponse d&amp;#x27;une requete : 13.606122\nTemps de reponse d&amp;#x27;une requete : 13.411807\nTemps de reponse d&amp;#x27;une requete : 13.444016\nTemps de reponse d&amp;#x27;une requete : 13.398239\nTemps de reponse d&amp;#x27;une requete : 13.20542\nTemps de reponse d&amp;#x27;une requete : 13.394155\nTemps de reponse d&amp;#x27;une requete : 13.203209\nTemps de reponse d&amp;#x27;une requete : 13.417877\nTemps de reponse d&amp;#x27;une requete : 13.372137\nTemps de reponse d&amp;#x27;une requete : 13.397412\nTemps de reponse d&amp;#x27;une requete : 13.505852\nTemps de reponse d&amp;#x27;une requete : 13.445145\nTemps de reponse d&amp;#x27;une requete : 13.381917\nTemps de reponse d&amp;#x27;une requete : 13.358426\nTemps de reponse d&amp;#x27;une requete : 13.375878\nTemps de reponse d&amp;#x27;une requete : 12.373513\nTemps de reponse d&amp;#x27;une requete : 12.552694\nTemps de reponse d&amp;#x27;une requete : 12.807418\nTemps de reponse d&amp;#x27;une requete : 12.807502\nTemps de reponse d&amp;#x27;une requete : 13.05339\nTemps de reponse d&amp;#x27;une requete : 12.705904\nTemps de reponse d&amp;#x27;une requete : 12.907407\nTemps de reponse d&amp;#x27;une requete : 12.227776\nTemps de reponse d&amp;#x27;une requete : 12.938872\nTemps de reponse d&amp;#x27;une requete : 12.847638\nTemps de reponse d&amp;#x27;une requete : 11.958197\nTemps de reponse d&amp;#x27;une requete : 11.958432\nTemps de reponse d&amp;#x27;une requete : 11.947621\nTemps de reponse d&amp;#x27;une requete : 12.634245\nTemps de reponse d&amp;#x27;une requete : 12.068756\nTemps de reponse d&amp;#x27;une requete : 12.638269\nTemps de reponse d&amp;#x27;une requete : 12.026263\nTemps de reponse d&amp;#x27;une requete : 12.065159\nTemps de reponse d&amp;#x27;une requete : 12.73687\nTemps de reponse d&amp;#x27;une requete : 12.615219\nTemps de reponse d&amp;#x27;une requete : 12.650563\nTemps de reponse d&amp;#x27;une requete : 12.70534\nTemps de reponse d&amp;#x27;une requete : 12.647212\nTemps de reponse d&amp;#x27;une requete : 12.70189\nTemps de reponse d&amp;#x27;une requete : 11.797604\nTemps de reponse d&amp;#x27;une requete : 11.983243\nTemps de reponse d&amp;#x27;une requete : 12.674928\nTemps de reponse d&amp;#x27;une requete : 11.79688\nTemps de reponse d&amp;#x27;une requete : 12.21514\nTemps de reponse d&amp;#x27;une requete : 12.631814\nTemps de reponse d&amp;#x27;une requete : 11.979204\nTemps de reponse d&amp;#x27;une requete : 11.579803\nTemps de reponse d&amp;#x27;une requete : 5.504336\nTemps de reponse d&amp;#x27;une requete : 12.311397\nTemps de reponse d&amp;#x27;une requete : 5.7279\nTemps de reponse d&amp;#x27;une requete : 1.446377\nTemps de reponse d&amp;#x27;une requete : 5.499986\nTemps de reponse d&amp;#x27;une requete : 11.500147\nTemps de reponse d&amp;#x27;une requete : 5.399172\nTemps de reponse d&amp;#x27;une requete : 0.712723\nTemps de reponse d&amp;#x27;une requete : 1.240902\nTemps de reponse d&amp;#x27;une requete : 5.495932\nTemps de reponse d&amp;#x27;une requete : 0.704642\nTemps de reponse d&amp;#x27;une requete : 5.797377\nTemps de reponse d&amp;#x27;une requete : 1.546824\nTemps de reponse d&amp;#x27;une requete : 5.79218\nTemps de reponse d&amp;#x27;une requete : 2.836372\nTemps de reponse d&amp;#x27;une requete : 5.420913\nTemps de reponse d&amp;#x27;une requete : 5.359756\nTemps de reponse d&amp;#x27;une requete : 5.481728\nTemps de reponse d&amp;#x27;une requete : 5.779592\nTemps de reponse d&amp;#x27;une requete : 11.326214\nTemps de reponse d&amp;#x27;une requete : 11.28767\nTemps de reponse d&amp;#x27;une requete : 11.322763\nTemps de reponse d&amp;#x27;une requete : 3.621098\nTemps de reponse d&amp;#x27;une requete : 11.786394\nTemps de reponse d&amp;#x27;une requete : 4.121548\nTemps de reponse d&amp;#x27;une requete : 11.754671\nTemps de reponse d&amp;#x27;une requete : 11.78035\nTemps de reponse d&amp;#x27;une requete : 11.734638\nTemps de reponse d&amp;#x27;une requete : 11.764956\nTemps de reponse d&amp;#x27;une requete : 4.028714\nTemps de reponse d&amp;#x27;une requete : 11.676522\nTemps de reponse d&amp;#x27;une requete : 11.76542\nTemps de reponse d&amp;#x27;une requete : 1.189029\nTemps de reponse d&amp;#x27;une requete : 10.607536\nTemps de reponse d&amp;#x27;une requete : 11.494699\nTemps de reponse d&amp;#x27;une requete : 11.447219\nTemps de reponse d&amp;#x27;une requete : 4.00886\nTemps de reponse d&amp;#x27;une requete : 4.732459\nTemps de reponse d&amp;#x27;une requete : 10.574156\nTemps de reponse d&amp;#x27;une requete : 11.435761\nTemps de reponse d&amp;#x27;une requete : 10.695411\nTemps de reponse d&amp;#x27;une requete : 4.925321\nTemps de reponse d&amp;#x27;une requete : 3.825984\nTemps de reponse d&amp;#x27;une requete : 5.56493\nTemps de reponse d&amp;#x27;une requete : 1.1887\nTemps de reponse d&amp;#x27;une requete : 11.370147\nTemps de reponse d&amp;#x27;une requete : 10.348015\nTemps de reponse d&amp;#x27;une requete : 10.43855\nTemps de reponse d&amp;#x27;une requete : 11.166289\nTemps de reponse d&amp;#x27;une requete : 10.496404\nTemps de reponse d&amp;#x27;une requete : 11.288916\nTemps de reponse d&amp;#x27;une requete : 4.87249\nTemps de reponse d&amp;#x27;une requete : 4.430288\nTemps de reponse d&amp;#x27;une requete : 10.379921\nTemps de reponse d&amp;#x27;une requete : 1.609703\nTemps de reponse d&amp;#x27;une requete : 4.924086\nTemps de reponse d&amp;#x27;une requete : 5.499754\nTemps de reponse d&amp;#x27;une requete : 5.461528\nTemps de reponse d&amp;#x27;une requete : 10.695295\nTemps de reponse d&amp;#x27;une requete : 10.498765\nTemps de reponse d&amp;#x27;une requete : 10.366039\nTemps de reponse d&amp;#x27;une requete : 10.926213\nTemps de reponse d&amp;#x27;une requete : 10.893531\nTemps de reponse d&amp;#x27;une requete : 10.951301\nTemps de reponse d&amp;#x27;une requete : 4.762791\nTemps de reponse d&amp;#x27;une requete : 10.920629\nTemps de reponse d&amp;#x27;une requete : 10.197574\nTemps de reponse d&amp;#x27;une requete : 10.461672\nTemps de reponse d&amp;#x27;une requete : 4.402096\nTemps de reponse d&amp;#x27;une requete : 4.752071\nTemps de reponse d&amp;#x27;une requete : 9.651744\nTemps de reponse d&amp;#x27;une requete : 9.877588\nTemps de reponse d&amp;#x27;une requete : 9.640037\nTemps de reponse d&amp;#x27;une requete : 4.087304\nTemps de reponse d&amp;#x27;une requete : 4.29908\nTemps de reponse d&amp;#x27;une requete : 10.598149\nTemps de reponse d&amp;#x27;une requete : 10.078191\nTemps de reponse d&amp;#x27;une requete : 10.614388\nTemps de reponse d&amp;#x27;une requete : 10.507426\nTemps de reponse d&amp;#x27;une requete : 10.066168\nTemps de reponse d&amp;#x27;une requete : 9.740528\nTemps de reponse d&amp;#x27;une requete : 4.44593\nTemps de reponse d&amp;#x27;une requete : 10.474105\nTemps de reponse d&amp;#x27;une requete : 9.731969\nTemps de reponse d&amp;#x27;une requete : 10.448274\nTemps de reponse d&amp;#x27;une requete : 10.037778\nTemps de reponse d&amp;#x27;une requete : 10.543609\nTemps de reponse d&amp;#x27;une requete : 9.945175\nTemps de reponse d&amp;#x27;une requete : 10.285413\nTemps de reponse d&amp;#x27;une requete : 9.602856\nTemps de reponse d&amp;#x27;une requete : 10.424702\nTemps de reponse d&amp;#x27;une requete : 4.416835\nTemps de reponse d&amp;#x27;une requete : 10.47917\nTemps de reponse d&amp;#x27;une requete : 8.706522\nTemps de reponse d&amp;#x27;une requete : 9.278111\nTemps de reponse d&amp;#x27;une requete : 10.49037\nTemps de reponse d&amp;#x27;une requete : 10.126118\nTemps de reponse d&amp;#x27;une requete : 10.46809\nTemps de reponse d&amp;#x27;une requete : 10.33262\nTemps de reponse d&amp;#x27;une requete : 3.004574\nTemps de reponse d&amp;#x27;une requete : 10.07473\nTemps de reponse d&amp;#x27;une requete : 5.077807\nTemps de reponse d&amp;#x27;une requete : 10.219002\nTemps de reponse d&amp;#x27;une requete : 4.199199\nTemps de reponse d&amp;#x27;une requete : 9.894766\nTemps de reponse d&amp;#x27;une requete : 9.691197\nTemps de reponse d&amp;#x27;une requete : 9.71338\nTemps de reponse d&amp;#x27;une requete : 9.481709\nTemps de reponse d&amp;#x27;une requete : 4.046313\nTemps de reponse d&amp;#x27;une requete : 9.578358\nTemps de reponse d&amp;#x27;une requete : 9.471295\nTemps de reponse d&amp;#x27;une requete : 9.531673\nTemps de reponse d&amp;#x27;une requete : 9.268176\nTemps de reponse d&amp;#x27;une requete : 1.934485\nTemps de reponse d&amp;#x27;une requete : 8.709785\nTemps de reponse d&amp;#x27;une requete : 9.069764\nTemps de reponse d&amp;#x27;une requete : 9.479656\nTemps de reponse d&amp;#x27;une requete : 4.184821\nTemps de reponse d&amp;#x27;une requete : 7.816312\nTemps de reponse d&amp;#x27;une requete : 8.851491\nTemps de reponse d&amp;#x27;une requete : 9.245961\nTemps de reponse d&amp;#x27;une requete : 8.683742\nTemps de reponse d&amp;#x27;une requete : 8.889259\nTemps de reponse d&amp;#x27;une requete : 8.444092\nTemps de reponse d&amp;#x27;une requete : 7.76989\nTemps de reponse d&amp;#x27;une requete : 8.546376\nTemps de reponse d&amp;#x27;une requete : 8.655503\nTemps de reponse d&amp;#x27;une requete : 1.896994\nTemps de reponse d&amp;#x27;une requete : 8.567506\nTemps de reponse d&amp;#x27;une requete : 9.190718\nTemps de reponse d&amp;#x27;une requete : 8.496108\nTemps de reponse d&amp;#x27;une requete : 1.860927\nTemps de reponse d&amp;#x27;une requete : 8.660493\nTemps de reponse d&amp;#x27;une requete : 8.467306\nTemps de reponse d&amp;#x27;une requete : 8.49163\nTemps de reponse d&amp;#x27;une requete : 8.768822\nTemps de reponse d&amp;#x27;une requete : 9.215744\nTemps de reponse d&amp;#x27;une requete : 8.446516\nTemps de reponse d&amp;#x27;une requete : 8.549335\nTemps de reponse d&amp;#x27;une requete : 8.395486\nTemps de reponse d&amp;#x27;une requete : 1.859277\nTemps de reponse d&amp;#x27;une requete : 8.564879\nTemps de reponse d&amp;#x27;une requete : 1.865039\nTemps de reponse d&amp;#x27;une requete : 8.116835\nTemps de reponse d&amp;#x27;une requete : 9.119756\nTemps de reponse d&amp;#x27;une requete : 8.521524\nTemps de reponse d&amp;#x27;une requete : 1.717374\nTemps de reponse d&amp;#x27;une requete : 8.471778\nTemps de reponse d&amp;#x27;une requete : 8.452809\nTemps de reponse d&amp;#x27;une requete : 8.225033\nTemps de reponse d&amp;#x27;une requete : 8.498504\nTemps de reponse d&amp;#x27;une requete : 3.017987\nTemps de reponse d&amp;#x27;une requete : 8.445947\nTemps de reponse d&amp;#x27;une requete : 8.308855\nTemps de reponse d&amp;#x27;une requete : 7.901543\nTemps de reponse d&amp;#x27;une requete : 7.755783\nTemps de reponse d&amp;#x27;une requete : 8.135989\nTemps de reponse d&amp;#x27;une requete : 8.044682\nTemps de reponse d&amp;#x27;une requete : 7.72342\nTemps de reponse d&amp;#x27;une requete : 8.359431\nTemps de reponse d&amp;#x27;une requete : 7.708018\nTemps de reponse d&amp;#x27;une requete : 8.302792\nTemps de reponse d&amp;#x27;une requete : 8.332842\nTemps de reponse d&amp;#x27;une requete : 7.864757\nTemps de reponse d&amp;#x27;une requete : 7.90468\nTemps de reponse d&amp;#x27;une requete : 7.84103\nTemps de reponse d&amp;#x27;une requete : 7.361476\nTemps de reponse d&amp;#x27;une requete : 0.697212\nTemps de reponse d&amp;#x27;une requete : 7.480452\nTemps de reponse d&amp;#x27;une requete : 4.01994\nTemps de reponse d&amp;#x27;une requete : 7.706825\nTemps de reponse d&amp;#x27;une requete : 7.377389\nTemps de reponse d&amp;#x27;une requete : 7.935978\nTemps de reponse d&amp;#x27;une requete : 7.312997\nTemps de reponse d&amp;#x27;une requete : 8.176849\nTemps de reponse d&amp;#x27;une requete : 2.613154\nTemps de reponse d&amp;#x27;une requete : 7.258157\nTemps de reponse d&amp;#x27;une requete : 7.258303\nTemps de reponse d&amp;#x27;une requete : 7.278041\nTemps de reponse d&amp;#x27;une requete : 1.588021\nTemps de reponse d&amp;#x27;une requete : 2.526842\nTemps de reponse d&amp;#x27;une requete : 7.280403\nTemps de reponse d&amp;#x27;une requete : 7.871266\nTemps de reponse d&amp;#x27;une requete : 7.922204\nTemps de reponse d&amp;#x27;une requete : 1.943173\nTemps de reponse d&amp;#x27;une requete : 7.786561\nTemps de reponse d&amp;#x27;une requete : 6.88482\nTemps de reponse d&amp;#x27;une requete : 7.773692\nTemps de reponse d&amp;#x27;une requete : 7.638843\nTemps de reponse d&amp;#x27;une requete : 6.769836\nTemps de reponse d&amp;#x27;une requete : 7.419654\nTemps de reponse d&amp;#x27;une requete : 7.628866\nTemps de reponse d&amp;#x27;une requete : 0.747704\nTemps de reponse d&amp;#x27;une requete : 6.799285\nTemps de reponse d&amp;#x27;une requete : 7.462118\nTemps de reponse d&amp;#x27;une requete : 6.838569\nTemps de reponse d&amp;#x27;une requete : 7.272034\nTemps de reponse d&amp;#x27;une requete : 7.329838\nTemps de reponse d&amp;#x27;une requete : 6.185914\nTemps de reponse d&amp;#x27;une requete : 3.680234\nTemps de reponse d&amp;#x27;une requete : 6.285738\nTemps de reponse d&amp;#x27;une requete : 6.583299\nTemps de reponse d&amp;#x27;une requete : 7.390411\nTemps de reponse d&amp;#x27;une requete : 7.282419\nTemps de reponse d&amp;#x27;une requete : 7.249125\nTemps de reponse d&amp;#x27;une requete : 2.417609\nTemps de reponse d&amp;#x27;une requete : 7.195049\nTemps de reponse d&amp;#x27;une requete : 7.125768\nTemps de reponse d&amp;#x27;une requete : 3.263386\nTemps de reponse d&amp;#x27;une requete : 6.422923\nTemps de reponse d&amp;#x27;une requete : 6.21407\nTemps de reponse d&amp;#x27;une requete : 6.169832\nTemps de reponse d&amp;#x27;une requete : 6.914615\nTemps de reponse d&amp;#x27;une requete : 6.200791\nTemps de reponse d&amp;#x27;une requete : 6.300094\nTemps de reponse d&amp;#x27;une requete : 6.323493\nTemps de reponse d&amp;#x27;une requete : 1.020854\nTemps de reponse d&amp;#x27;une requete : 6.134122\nTemps de reponse d&amp;#x27;une requete : 6.330466\nTemps de reponse d&amp;#x27;une requete : 6.348991\nTemps de reponse d&amp;#x27;une requete : 6.365475\nTemps de reponse d&amp;#x27;une requete : 5.988521\nTemps de reponse d&amp;#x27;une requete : 6.325307\nTemps de reponse d&amp;#x27;une requete : 6.940588\nTemps de reponse d&amp;#x27;une requete : 6.192062\nTemps de reponse d&amp;#x27;une requete : 6.278114\nTemps de reponse d&amp;#x27;une requete : 6.014932\nTemps de reponse d&amp;#x27;une requete : 6.82936\nTemps de reponse d&amp;#x27;une requete : 6.252733\nTemps de reponse d&amp;#x27;une requete : 6.899215\nTemps de reponse d&amp;#x27;une requete : 6.930898\nTemps de reponse d&amp;#x27;une requete : 5.665523\nTemps de reponse d&amp;#x27;une requete : 6.38177\nTemps de reponse d&amp;#x27;une requete : 6.375078\nTemps de reponse d&amp;#x27;une requete : 6.165415\nTemps de reponse d&amp;#x27;une requete : 6.523364\nTemps de reponse d&amp;#x27;une requete : 6.160126\nTemps de reponse d&amp;#x27;une requete : 5.585292\nTemps de reponse d&amp;#x27;une requete : 6.460469\nTemps de reponse d&amp;#x27;une requete : 5.886442\nTemps de reponse d&amp;#x27;une requete : 6.350877\nTemps de reponse d&amp;#x27;une requete : 6.457296\nTemps de reponse d&amp;#x27;une requete : 5.90175\nTemps de reponse d&amp;#x27;une requete : 6.361938\nTemps de reponse d&amp;#x27;une requete : 6.358866\nTemps de reponse d&amp;#x27;une requete : 6.384851\nTemps de reponse d&amp;#x27;une requete : 6.366809\nTemps de reponse d&amp;#x27;une requete : 6.553103\nTemps de reponse d&amp;#x27;une requete : 6.136818\nTemps de reponse d&amp;#x27;une requete : 6.036851\nTemps de reponse d&amp;#x27;une requete : 6.293403\nTemps de reponse d&amp;#x27;une requete : 6.39461\nTemps de reponse d&amp;#x27;une requete : 6.396826\nTemps de reponse d&amp;#x27;une requete : 5.21227\nTemps de reponse d&amp;#x27;une requete : 5.988638\nTemps de reponse d&amp;#x27;une requete : 4.41133\nTemps de reponse d&amp;#x27;une requete : 6.304462\nTemps de reponse d&amp;#x27;une requete : 6.36736\nTemps de reponse d&amp;#x27;une requete : 6.100066\nTemps de reponse d&amp;#x27;une requete : 6.055688\nTemps de reponse d&amp;#x27;une requete : 5.524283\nTemps de reponse d&amp;#x27;une requete : 4.349301\nTemps de reponse d&amp;#x27;une requete : 5.443679\nTemps de reponse d&amp;#x27;une requete : 6.024617\nTemps de reponse d&amp;#x27;une requete : 5.976124\nTemps de reponse d&amp;#x27;une requete : 5.939027\nTemps de reponse d&amp;#x27;une requete : 5.917484\nTemps de reponse d&amp;#x27;une requete : 5.990557\nTemps de reponse d&amp;#x27;une requete : 5.481517\nTemps de reponse d&amp;#x27;une requete : 5.440179\nTemps de reponse d&amp;#x27;une requete : 4.800582\nTemps de reponse d&amp;#x27;une requete : 5.881233\nTemps de reponse d&amp;#x27;une requete : 4.798566\nTemps de reponse d&amp;#x27;une requete : 5.250411\nTemps de reponse d&amp;#x27;une requete : 4.25731\nTemps de reponse d&amp;#x27;une requete : 5.303453\nTemps de reponse d&amp;#x27;une requete : 4.628122\nTemps de reponse d&amp;#x27;une requete : 4.263073\nTemps de reponse d&amp;#x27;une requete : 5.162612\nTemps de reponse d&amp;#x27;une requete : 4.261079\nTemps de reponse d&amp;#x27;une requete : 4.251253\nTemps de reponse d&amp;#x27;une requete : 4.439637\nTemps de reponse d&amp;#x27;une requete : 5.082463\nTemps de reponse d&amp;#x27;une requete : 4.542643\nTemps de reponse d&amp;#x27;une requete : 5.071644\nTemps de reponse d&amp;#x27;une requete : 4.473227\nTemps de reponse d&amp;#x27;une requete : 4.867765\nTemps de reponse d&amp;#x27;une requete : 4.68078\nTemps de reponse d&amp;#x27;une requete : 4.229532\nTemps de reponse d&amp;#x27;une requete : 4.207485\nTemps de reponse d&amp;#x27;une requete : 4.948427\nTemps de reponse d&amp;#x27;une requete : 4.091419\nTemps de reponse d&amp;#x27;une requete : 4.248705\nTemps de reponse d&amp;#x27;une requete : 4.254983\nTemps de reponse d&amp;#x27;une requete : 4.256004\nTemps de reponse d&amp;#x27;une requete : 4.248986\nTemps de reponse d&amp;#x27;une requete : 4.097995\nTemps de reponse d&amp;#x27;une requete : 4.694945\nTemps de reponse d&amp;#x27;une requete : 4.096722\nTemps de reponse d&amp;#x27;une requete : 4.651878\nTemps de reponse d&amp;#x27;une requete : 4.055375\nTemps de reponse d&amp;#x27;une requete : 4.598956\nTemps de reponse d&amp;#x27;une requete : 4.089266\nTemps de reponse d&amp;#x27;une requete : 3.927657\nTemps de reponse d&amp;#x27;une requete : 3.675832\nTemps de reponse d&amp;#x27;une requete : 4.28568\nTemps de reponse d&amp;#x27;une requete : 3.812986\nTemps de reponse d&amp;#x27;une requete : 4.53903\nTemps de reponse d&amp;#x27;une requete : 3.675871\nTemps de reponse d&amp;#x27;une requete : 4.41236\nTemps de reponse d&amp;#x27;une requete : 3.815897\nTemps de reponse d&amp;#x27;une requete : 3.805737\nTemps de reponse d&amp;#x27;une requete : 3.794714\nTemps de reponse d&amp;#x27;une requete : 3.764575\nTemps de reponse d&amp;#x27;une requete : 3.75401\nTemps de reponse d&amp;#x27;une requete : 4.177553\nTemps de reponse d&amp;#x27;une requete : 3.877985\nTemps de reponse d&amp;#x27;une requete : 3.808774\nTemps de reponse d&amp;#x27;une requete : 3.602869\nTemps de reponse d&amp;#x27;une requete : 4.360562\nTemps de reponse d&amp;#x27;une requete : 3.772545\nTemps de reponse d&amp;#x27;une requete : 3.553669\nTemps de reponse d&amp;#x27;une requete : 4.180235\nTemps de reponse d&amp;#x27;une requete : 4.207453\nTemps de reponse d&amp;#x27;une requete : 3.323748\nTemps de reponse d&amp;#x27;une requete : 3.372668\nTemps de reponse d&amp;#x27;une requete : 3.54251\nTemps de reponse d&amp;#x27;une requete : 4.184827\nTemps de reponse d&amp;#x27;une requete : 4.167927\nTemps de reponse d&amp;#x27;une requete : 3.590914\nTemps de reponse d&amp;#x27;une requete : 3.540597\nTemps de reponse d&amp;#x27;une requete : 3.296599\nTemps de reponse d&amp;#x27;une requete : 3.325191\nTemps de reponse d&amp;#x27;une requete : 3.381121\nTemps de reponse d&amp;#x27;une requete : 4.162601\nTemps de reponse d&amp;#x27;une requete : 4.179789\nTemps de reponse d&amp;#x27;une requete : 3.453875\nTemps de reponse d&amp;#x27;une requete : 3.53451\nTemps de reponse d&amp;#x27;une requete : 3.167233\nTemps de reponse d&amp;#x27;une requete : 4.174768\nTemps de reponse d&amp;#x27;une requete : 3.203327\nTemps de reponse d&amp;#x27;une requete : 4.156528\nTemps de reponse d&amp;#x27;une requete : 3.489057\nTemps de reponse d&amp;#x27;une requete : 3.780739\nTemps de reponse d&amp;#x27;une requete : 3.304047\nTemps de reponse d&amp;#x27;une requete : 3.395452\nTemps de reponse d&amp;#x27;une requete : 3.283584\nTemps de reponse d&amp;#x27;une requete : 3.928558\nTemps de reponse d&amp;#x27;une requete : 3.889975\nTemps de reponse d&amp;#x27;une requete : 3.129191\nTemps de reponse d&amp;#x27;une requete : 2.986108\nTemps de reponse d&amp;#x27;une requete : 3.28363\nTemps de reponse d&amp;#x27;une requete : 3.120735\nTemps de reponse d&amp;#x27;une requete : 3.738355\nTemps total d&amp;#x27;ex\u00e9cution : 29.218764305114746\nTemps de r\u00e9ponse moyen : 0.029218764305114747 secondes\nTaux de succ\u00e8s : 0.0%\nTaux d&amp;#x27;\u00e9chec : 100.0%\nLe debit : 34.22458217457711\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;03-06-2024 09-22-37.html&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
+
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
+
+    get allData() {
+        return { ...this.data }
+    }
+
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
+
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
+
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
+
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
+
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
+
+    get environment() {
+        return this.renderData.environment
+    }
+
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
+
+module.exports = {
+    manager: new DataManager(),
+}
+
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
+
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
+
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
+
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
+
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
+
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
+
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
+
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>
